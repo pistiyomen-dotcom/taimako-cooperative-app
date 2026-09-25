@@ -531,6 +531,3 @@ fun LoanApplicationPage(back: () -> Unit) {
         Text("Member loan term: 30 days. Interest: 5%. Approved loan details will later appear on the Member Dashboard.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
     }
 }
-
-
-@Composable
