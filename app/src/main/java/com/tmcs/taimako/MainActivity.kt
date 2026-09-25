@@ -51,13 +51,13 @@ fun HomePage(open: (String) -> Unit) {
         Spacer(Modifier.height(30.dp))
         Text("TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
         Spacer(Modifier.height(14.dp))
-        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
         Text("A cooperative movement for achieving financial independence.")
         Spacer(Modifier.height(24.dp))
         menus.chunked(2).forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                 row.forEach { item ->
-                    Button(onClick={open(item)}, modifier=Modifier.weight(1f).height(64.dp), colors=ButtonDefaults.buttonColors(containerColor=if (item == "FLEXIBLE" || item == "INVESTMENT" || item == "MEMBERSHIP" || item == "CONTACT US") Color(0xFFD4AF37) else Color(0xFF146B3A), contentColor=if (item == "FLEXIBLE" || item == "INVESTMENT" || item == "MEMBERSHIP" || item == "CONTACT US") Color.Black else Color.White)) { Text(item) }
+                    Button(onClick={open(item)}, modifier=Modifier.weight(1f).height(64.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) { Text(item) }
                 }
                 if(row.size==1) Spacer(Modifier.weight(1f))
             }
@@ -71,7 +71,7 @@ fun InfoPage(page: String, back: () -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
         Spacer(Modifier.height(28.dp))
         TextButton(onClick=back) { Text("← BACK") }
-        Text(page, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold)
+        Text(page, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Spacer(Modifier.height(16.dp))
         when(page) {
             "SAVINGS" -> SavingsPage()
@@ -90,23 +90,23 @@ fun InfoPage(page: String, back: () -> Unit) {
 fun SavingsPage() {
     Text("Savings plans for registered cooperative members.", fontWeight=FontWeight.Bold)
     Spacer(Modifier.height(12.dp))
-    Text("REGULAR\nTARGET\nCONSTANT\nWELFARE")
+    Text("REGULAR\nTARGET\nCONSTANT\nWELFARE\nFLEXIBLE")
     Spacer(Modifier.height(12.dp))
     Text("Stage 1 navigation is active. Detailed individual savings pages will be added in the next controlled step.")
 }
 
 @Composable
 fun AboutPage() {
-    Text("HISTORY", fontWeight=FontWeight.Bold)
+    Text("HISTORY", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
     Text("TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD was founded in 2015 by Bro. Monday Musa as a small group involving close business neighbours, relatives and friends.\n\nIn 2023, the cooperative gained the confidence of interested individuals within the community who shared common cooperative goals. Their participation led to remarkable growth, enabling the cooperative to form a Management Committee for full cooperative society operations.")
     Spacer(Modifier.height(14.dp))
-    Text("MISSION", fontWeight=FontWeight.Bold); Text("To help members attain business independence.")
+    Text("MISSION", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37)); Text("To help members attain business independence.")
     Spacer(Modifier.height(14.dp))
-    Text("VALUES", fontWeight=FontWeight.Bold); Text("Integrity • Equity • Self-Help")
+    Text("VALUES", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37)); Text("Integrity • Equity • Self-Help")
     Spacer(Modifier.height(14.dp))
-    Text("MEETINGS", fontWeight=FontWeight.Bold); Text("AGM\nExecutive Council Meeting\nEmergency Meeting\nTraining and Seminar")
+    Text("MEETINGS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37)); Text("AGM\nExecutive Council Meeting\nEmergency Meeting\nTraining and Seminar")
     Spacer(Modifier.height(14.dp))
-    Text("COOPERATIVE OPERATIONS", fontWeight=FontWeight.Bold); Text("Savings • Loan • Investment • Commerce")
+    Text("COOPERATIVE OPERATIONS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37)); Text("Savings • Loan • Investment • Commerce")
 }
 
 @Composable
@@ -120,6 +120,6 @@ fun ContactPage() {
     OutlinedTextField(subject,{subject=it},label={Text("Subject")},modifier=Modifier.fillMaxWidth())
     OutlinedTextField(message,{message=it},label={Text("Message")},modifier=Modifier.fillMaxWidth(),minLines=4)
     Spacer(Modifier.height(12.dp))
-    Button(onClick={}, enabled=name.isNotBlank()&&phone.isNotBlank()&&subject.isNotBlank()&&message.isNotBlank()) { Text("SUBMIT") }
+    Button(onClick={}, enabled=name.isNotBlank()&&phone.isNotBlank()&&subject.isNotBlank()&&message.isNotBlank(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("SUBMIT") }
     Text("Stage 1 form only — backend submission will be connected in a later stage.")
 }
