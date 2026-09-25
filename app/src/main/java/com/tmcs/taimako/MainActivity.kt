@@ -50,7 +50,7 @@ fun TaimakoApp() {
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
-                "WITHDRAW" -> MemberPlaceholderPage("WITHDRAW") { page = "MEMBER DASHBOARD" }
+                "WITHDRAW" -> WithdrawPage { page = "MEMBER DASHBOARD" }
                 "APPLY FOR LOAN" -> MemberPlaceholderPage("APPLY FOR LOAN") { page = "MEMBER DASHBOARD" }
                 else -> InfoPage(page) { page = "HOME" }
             }
@@ -391,5 +391,71 @@ fun TransactionHistoryPage(back: () -> Unit) {
 
         Spacer(Modifier.height(10.dp))
         Text("Approved deposits, cash credits, withdrawals, loan payments and other account movements will appear here after backend integration.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+    }
+}
+
+
+@Composable
+fun WithdrawPage(back: () -> Unit) {
+    var amount by remember { mutableStateOf("") }
+    var accepted by remember { mutableStateOf(false) }
+    var showChargeNotice by remember { mutableStateOf(false) }
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("WITHDRAW", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 6 interface test — no withdrawal will be submitted yet.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(
+            value=amount,
+            onValueChange={ value ->
+                if (value.all { it.isDigit() }) {
+                    amount=value
+                    accepted=false
+                }
+            },
+            label={Text("Withdrawal Amount (₦)")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(14.dp))
+
+        Button(
+            onClick={showChargeNotice=true},
+            enabled=amount.toLongOrNull()?.let { it > 0 } == true,
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(44.dp),
+            contentPadding=PaddingValues(horizontal=14.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
+        ) { Text("CHECK WITHDRAWAL CHARGE") }
+
+        Spacer(Modifier.height(14.dp))
+        if (accepted) {
+            Text("Withdrawal charge accepted ✓", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+            Spacer(Modifier.height(10.dp))
+        }
+
+        Button(
+            onClick={},
+            enabled=amount.toLongOrNull()?.let { it > 0 } == true && accepted,
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(44.dp),
+            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+        ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
+    }
+
+    if (showChargeNotice) {
+        AlertDialog(
+            onDismissRequest={showChargeNotice=false},
+            title={Text("WITHDRAWAL CHARGE", fontWeight=FontWeight.Bold)},
+            text={Text("Applicable charge depends on the month of withdrawal:\n\nNovember – June: 20%\nJuly: 15%\nAugust: 10%\nSeptember: 5%\n\nOctober withdrawal rule will be confirmed before backend activation.")},
+            confirmButton={
+                TextButton(onClick={accepted=true; showChargeNotice=false}) { Text("ACCEPT", fontWeight=FontWeight.Bold) }
+            },
+            dismissButton={
+                TextButton(onClick={accepted=false; showChargeNotice=false}) { Text("DECLINE") }
+            }
+        )
     }
 }
