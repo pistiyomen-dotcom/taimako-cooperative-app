@@ -47,6 +47,9 @@ fun TaimakoApp() {
                 "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
                 "LOGIN" -> LoginPage(login = { page = "MEMBER DASHBOARD" }, back = { page = "MEMBERSHIP" })
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
+                "ADMIN LOGIN" -> AdminLoginPage(login = { page = "ADMIN DASHBOARD" }, back = { page = "HOME" })
+                "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "ADMIN LOGIN" })
+                "CREATE MEMBER", "CREDIT CASH", "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -60,7 +63,7 @@ fun TaimakoApp() {
 
 @Composable
 fun HomePage(open: (String) -> Unit) {
-    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US")
+    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US","ADMIN LOGIN")
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -529,5 +532,62 @@ fun LoanApplicationPage(back: () -> Unit) {
 
         Spacer(Modifier.height(12.dp))
         Text("Member loan term: 30 days. Interest: 5%. Approved loan details will later appear on the Member Dashboard.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+    }
+}
+
+@Composable
+fun AdminLoginPage(login: () -> Unit, back: () -> Unit) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("ADMIN LOGIN", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(20.dp))
+        OutlinedTextField(username,{username=it},label={Text("Admin Username")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(password,{password=it},label={Text("Password")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+        Button(onClick=login, enabled=username.isNotBlank() && password.isNotBlank(), modifier=Modifier.height(44.dp), contentPadding=PaddingValues(horizontal=24.dp, vertical=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN", fontWeight=FontWeight.Bold) }
+        Spacer(Modifier.height(12.dp))
+        Text("Stage 8 Admin interface test only. Real Admin authentication is not connected yet.", color=Color.Gray, textAlign=TextAlign.Center)
+    }
+}
+
+@Composable
+fun AdminDashboardPage(open: (String) -> Unit, back: () -> Unit) {
+    val actions = listOf("CREATE MEMBER","CREDIT CASH","APPROVALS","MEMBERS","CREATE ADMIN","ADMIN PERMISSIONS")
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← LOGOUT") }
+        Card(Modifier.fillMaxWidth().height(72.dp)) {
+            Box(Modifier.fillMaxSize(), contentAlignment=Alignment.Center) {
+                Text("ADMIN DASHBOARD", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+        Text("Stage 8 interface preview — no live Admin actions yet.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(20.dp))
+        actions.chunked(2).forEach { row ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                row.forEach { action ->
+                    Button(onClick={open(action)}, modifier=Modifier.weight(1f).height(64.dp), contentPadding=PaddingValues(horizontal=6.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
+                        Text(action, fontWeight=FontWeight.Bold, textAlign=TextAlign.Center)
+                    }
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+fun AdminPlaceholderPage(title: String, back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text(title, style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+        Text("This Admin function will be implemented and tested separately in the next controlled step.", color=Color.Gray, textAlign=TextAlign.Center)
     }
 }
