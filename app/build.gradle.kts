@@ -8,10 +8,16 @@ android {
     compileSdk = 35
     defaultConfig {
         applicationId = "com.tmcs.taimako.freshstage1"
-        minSdk = 24
+        minSdk = 21
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.1.1-stage1-install-fix"
+        versionCode = 3
+        versionName = "0.1.2-stage1-compatibility"
+    }
+    signingConfigs {
+        getByName("debug") {
+            enableV1Signing = true
+            enableV2Signing = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
