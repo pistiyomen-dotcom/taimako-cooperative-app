@@ -221,9 +221,10 @@ fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
             Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(10.dp)) {
                 pair.forEach { (label,value) ->
                     Card(Modifier.weight(1f).height(92.dp)) {
-                        Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement=Arrangement.SpaceBetween) {
-                            Text(label, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelMedium)
-                            Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium)
+                        Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement=Arrangement.Center, horizontalAlignment=Alignment.CenterHorizontally) {
+                            Text(label, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+                            Spacer(Modifier.height(6.dp))
+                            Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
                         }
                     }
                 }
