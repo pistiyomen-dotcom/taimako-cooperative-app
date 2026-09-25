@@ -7,11 +7,11 @@ android {
     namespace = "com.tmcs.taimako"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.tmcs.taimako.freshstage1"
+        applicationId = "com.tmcs.taimako.stage1clean"
         minSdk = 21
         targetSdk = 35
-        versionCode = 3
-        versionName = "0.1.2-stage1-compatibility"
+        versionCode = 1
+        versionName = "0.1.3-stage1-clean-package"
     }
     signingConfigs {
         getByName("debug") {
