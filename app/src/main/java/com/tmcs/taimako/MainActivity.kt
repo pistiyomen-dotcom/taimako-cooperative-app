@@ -916,48 +916,36 @@ fun CreditCashPage(back: () -> Unit) {
 
 @Composable
 fun ApprovalsPage(back: () -> Unit) {
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(28.dp))
-        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
-        Text("APPROVALS", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
-        Spacer(Modifier.height(6.dp))
-        Text("Stage 11 interface preview — no live submissions yet.", color=Color.Gray, textAlign=TextAlign.Center)
-        Spacer(Modifier.height(18.dp))
-
-        Card(Modifier.fillMaxWidth()) {
-            Column(Modifier.padding(14.dp)) {
-                Text("PENDING BANK TRANSFER", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), modifier=Modifier.fillMaxWidth(), textAlign=TextAlign.Center)
-                Spacer(Modifier.height(10.dp))
-                Text("FULL NAME", fontWeight=FontWeight.Bold)
-                Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
-                Spacer(Modifier.height(6.dp))
-                Text("USERNAME", fontWeight=FontWeight.Bold)
-                Text("12345", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
-                Spacer(Modifier.height(10.dp))
-                Text("PAYMENT DETAILS", fontWeight=FontWeight.Bold)
-                Text("Amount: ₦10,000\nPay For: REGULAR\nReceipt: Payment receipt attached")
-                Spacer(Modifier.height(14.dp))
-                Button(onClick={}, modifier=Modifier.align(Alignment.CenterHorizontally).height(42.dp), contentPadding=PaddingValues(horizontal=14.dp, vertical=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
-                    Text("VIEW RECEIPT", fontWeight=FontWeight.Bold)
-                }
-                Spacer(Modifier.height(14.dp))
-                Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.Center) {
-                    Button(onClick={}, modifier=Modifier.height(42.dp), contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) {
-                        Text("APPROVE", fontWeight=FontWeight.Bold)
-                    }
-                    Spacer(Modifier.width(12.dp))
-                    OutlinedButton(onClick={}, modifier=Modifier.height(42.dp), contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp)) {
-                        Text("REJECT", fontWeight=FontWeight.Bold)
-                    }
-                }
+    var selectedType by remember { mutableStateOf("BANK TRANSFER") }
+    val types=listOf("BANK TRANSFER","CASH CREDIT","WITHDRAWAL","FLEXIBLE TRANSFER")
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally){
+        Spacer(Modifier.height(28.dp));TextButton(onClick=back,modifier=Modifier.align(Alignment.Start)){Text("← BACK")}
+        Text("APPROVALS",style=MaterialTheme.typography.headlineLarge,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37),textAlign=TextAlign.Center,modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp));Text("Select a submission type to review.",color=Color.Gray,textAlign=TextAlign.Center);Spacer(Modifier.height(14.dp))
+        types.chunked(2).forEach{row->Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(8.dp)){row.forEach{type->Button(onClick={selectedType=type},modifier=Modifier.weight(1f),contentPadding=PaddingValues(horizontal=4.dp,vertical=4.dp),colors=ButtonDefaults.buttonColors(containerColor=if(selectedType==type)Color(0xFFD4AF37) else Color(0xFF146B3A),contentColor=if(selectedType==type)Color.Black else Color.White)){Text(type,fontWeight=FontWeight.Bold,textAlign=TextAlign.Center,style=MaterialTheme.typography.bodySmall)}}};Spacer(Modifier.height(8.dp))}
+        Spacer(Modifier.height(8.dp))
+        Card(Modifier.fillMaxWidth()){Column(Modifier.padding(14.dp)){
+            Text("PENDING $selectedType",fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37),modifier=Modifier.fillMaxWidth(),textAlign=TextAlign.Center);Spacer(Modifier.height(10.dp))
+            Text("FULL NAME",fontWeight=FontWeight.Bold);Text(if(selectedType=="FLEXIBLE TRANSFER")"Flexible Saver Full Name" else "Account Holder Full Name",color=Color(0xFF146B3A),fontWeight=FontWeight.Bold,style=MaterialTheme.typography.titleLarge)
+            Spacer(Modifier.height(6.dp));Text("USERNAME",fontWeight=FontWeight.Bold);Text(if(selectedType=="FLEXIBLE TRANSFER")"F001" else "12345",color=Color(0xFF146B3A),fontWeight=FontWeight.Bold,style=MaterialTheme.typography.titleLarge);Spacer(Modifier.height(10.dp))
+            when(selectedType){
+                "BANK TRANSFER"->{Text("SUBMISSION DETAILS",fontWeight=FontWeight.Bold);Text("Amount: ₦10,000\nDestination: REGULAR\nReceipt: Payment receipt attached");Spacer(Modifier.height(12.dp));Button(onClick={},modifier=Modifier.align(Alignment.CenterHorizontally),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A),contentColor=Color.White)){Text("VIEW RECEIPT",fontWeight=FontWeight.Bold)}}
+                "CASH CREDIT"->{Text("SUBMISSION DETAILS",fontWeight=FontWeight.Bold);Text("Account Type: REGULAR / FLEXIBLE\nAmount: ₦10,000\nCredit To: selected destination")}
+                "WITHDRAWAL"->{Text("SUBMISSION DETAILS",fontWeight=FontWeight.Bold);Text("Amount: ₦10,000\nAccount Type: REGULAR / FLEXIBLE\nApplicable charge: calculated by account rules")}
+                "FLEXIBLE TRANSFER"->{Text("SUBMISSION DETAILS",fontWeight=FontWeight.Bold);Text("From: FLEXIBLE\nAmount: ₦10,000\nTransfer To: selected linked Regular-account destination\nCharge: NONE")}
             }
-        }
-
+            Spacer(Modifier.height(14.dp));Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.Center){Button(onClick={},colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("APPROVE",fontWeight=FontWeight.Bold)};Spacer(Modifier.width(12.dp));OutlinedButton(onClick={}){Text("REJECT",fontWeight=FontWeight.Bold)}}
+        }}
         Spacer(Modifier.height(16.dp))
-        Text("Final workflow: APPROVE will automatically post the verified amount to the selected member account destination. Admin must not credit the same transfer manually. REJECT will leave the member balance unchanged.", color=Color.Gray, textAlign=TextAlign.Center)
+        Text(when(selectedType){
+            "BANK TRANSFER"->"Approval credits the verified amount automatically to the selected destination. The same transfer must never be credited manually."
+            "CASH CREDIT"->"Cash credit remains pending until an authorized Admin approves it; approval then credits the selected account destination."
+            "WITHDRAWAL"->"Withdrawal approval will debit the account according to its approved withdrawal rules and applicable charge."
+            else->"Flexible transfer has no withdrawal condition or charge. Approval moves the amount from Flexible balance to the selected linked Regular-account destination."
+        },color=Color.Gray,textAlign=TextAlign.Center)
+        Spacer(Modifier.height(6.dp));Text("Interface preview only — live pending submissions and balance changes will be connected through the backend.",color=Color.Gray,textAlign=TextAlign.Center)
     }
 }
-
 
 @Composable
 fun MembersPage(back: () -> Unit) {
