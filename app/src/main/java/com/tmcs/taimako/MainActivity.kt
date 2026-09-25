@@ -378,13 +378,440 @@ fun RegisterPage(contact: () -> Unit, back: () -> Unit) {
 
 @Composable
 fun ByeLawPage() {
-    Text("TMCS LTD BYE-LAW", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
-    Spacer(Modifier.height(12.dp))
-    Text("The cooperative Bye-law will be presented here in clearly arranged sections for public reading.")
-    Spacer(Modifier.height(12.dp))
-    Text("The full approved Bye-law text will be entered in a controlled step so that the wording is preserved accurately.")
+    Text("TMCS LTD BYE-LAW", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), style=MaterialTheme.typography.headlineSmall)
+    Spacer(Modifier.height(6.dp))
+    Text("Updated -October 2025", color=Color.Gray, fontWeight=FontWeight.Bold)
+    Spacer(Modifier.height(14.dp))
+    Text(
+        text = """1
+The Bye Laws
+TAIMAKO
+MULTI-PURPOSE
+CO-OPERATIVE SOCIETY LTD
+1.0 INTRODUCTION
+TAIMAKO MULTIPURPOSE CO-OPERATIVE SOCIETY 
+LTD was founded in the year 2015 by Bro. Monday 
+Musa as a small group involving closed business 
+neighbors, relatives and friends.
+In 2023 it gain the confidence of interested 
+individuals of the community sharing common co￾operative goals, who joined the co-operative leading 
+to a remarkable growth, hence the co-operative was 
+able to form management committee for a real-time 
+co-operative society operations.
+2.0 INTERPRETATION
+The content of this title will be generated when all is 
+completed
+3.0 DEFINITION
+TAIMAKO MULTIPURPOSE CO-OPERATIVE SOCIETY 
+LTD is a Community Society forum that aims to 
+support the sustainability of businesses, traders and 
+farmers.
+4.0 MISSION
+To help members attain business independent
+5.0 VALUES
+Integrity, Equity and Self-Help
+6.0 TARGET BENEFICIARY
+Traders, Business and Farmers. However, interested 
+Civil Servants and others can choose to participate
+7.0 AREA OF OPERATIONS
+Location: Romi and its Environs
+Address: #7 Wambai street @Wambai Street 
+junction) Lussa’a
+MODE OF OPERATIONS
+8.0 MEMBERSHIP
+Members of the community as prescribed by law
+8.1 ADMISSION TO MEMBERSHIP
+i. By purchase of membership application form duly 
+signed with relevant information provided. Thus, it's 
+a one-time Membership registration. However, 
+renewal applies to membership passbook and yearly 
+administration fee or others as may be decided at 
+AGM.
+ii. Registration, Annual renewal fee, cost of 
+application form and others shall be decided at the 
+AGM
+8.2 WITHDRAWAL OF MEMBERSHIP
+i. written application for withdrawal
+ii. 20% charge of total savings apply
+iii. Pay off can take up to 30 days time
+8.3 NEXT OF KIN
+a. Every member of the co-operative shall nominate 
+a person or persons (NEXT-OF-KIN) to whom his or 
+her entitlement shall be paid to in the event of death
+or permanent disability. Where no person/persons 
+has been so appointed as the NEXT-OF -KIN of the 
+affected cooperator prior to his/her death or 
+permanent disability, a letter of attestation shall be 
+required from a person/persons who claim to be the 
+heir to the deceased or on the ground of 
+incapacitation.
+8.4 SAVINGS (THRIFT)
+REGULAR SAVINGS: normal general savings plan 
+from November to October
+1. A savings account primarily for member savings
+2. Minimum share, shall be as decided at the AGM
+2
+3. Monthly savings NOT Compulsory, NO Penalty for 
+failure to contribute in any month
+5. Entitled to monthly dividend shares, IF 
+contribution is made up to a minimum share
+6. Entitled to loan of 90% of savings @5% interest 
+per 30days
+7. Total savings is disbursed at the end of 
+cooperative year (end of Oct)
+8. Dividend is paid at AGM
+8. 20% charge applies on withdrawal before end of 
+cooperative year
+CONSTANT SAVINGS: Suitable for long term plans
+1. A savings account separately from Regular savings 
+@minimum of 5 years locked savings period
+2. Minimum amount per share is announced and can 
+be review by the management
+3. Compulsory monthly savings
+4. 10% Charges applies as Penalty for failure to save a
+minimum share or any short saved amount in any 
+month; charges must be paid or be deducted from 
+savings
+5. Entitled to monthly dividend shares, IF 
+contribution is made up to a minimum share
+6. Entitled to loan of 90% of savings @3% interest 
+per 30days
+7. No end of year disbursement, but completed year 
+savings shall be spread over proceeding year 
+repeatedly until completion of savings duration
+8. Minimum balance of N300,000 after 5 Years is 
+required before withdrawal
+9. 20% charge applies on withdrawal under 5 years if 
+minimum balance of N300,000 isn't achieved, 
+however, minimum balance of 300,000 must be 
+maintained until 5 years, IF minimum balance of 
+N300,000 is not achieved after 5years, 5% charges of 
+short saved amount will be charged before 
+disbursement
+10. Withdrawal is possible from excess of minimum 
+balance if it's achieved before 5 years.
+11. Can withdraw excess of minimum balance 
+without charge @minimum of 30 days notice
+TARGET SAVINGS: Suitable for project plans
+1. A unique savings account to be decided by 
+member
+2. Minimum amount is calculated by target amount 
+for weekly or monthly savings
+3. Compulsory monthly savings of monthly target
+4. 10% charges apply for failure to pay minimum 
+monthly amount or short saved amount to meet up 
+target in any month
+5. Entitled to monthly dividend shares, IF 
+contribution is made up to a minimum share
+6. Entitled to 1% of fulfilled monthly target as reward
+or support to the member to achieve target
+7. Minimum target savings duration: 24 weeks (6 
+months)
+8. 20% charge applies on withdrawal before end of 
+target period
+9. Entitled to loan of 90% of savings @3% interest 
+per 30days, IF target savings duration is up to one 
+year
+3
+WELFARE SAVINGS: Suitable for education and 
+retirement plans
+1. Runs Flexible savings, -Save any amount any day as
+you fit
+2. Minimum savings duration is one year
+3. After savings duration is completed, the total 
+savings shall be spread into desired duration by the 
+member (minimum of one year) shall be paid 
+monthly share plus 1% of total balance until end of 
+disbursement duration, either by descending or 
+ascending order.
+4. Entitled to monthly dividend shares during savings 
+period
+5. No end of cooperative year disbursement
+6. 20% charge applies on withdrawal either during 
+savings or welfare period; however, withdrawal 
+notice of minimum of 30days is required
+8.5 THRIFT (SAVINGS) DISCIPLINE
+1. A co-operative society member who failed to 
+contribute a minimum of share amount in any 
+month, shall not be entitle to monthly share of 
+dividend for the respective month/months
+2. Any member who demand to withdraw savings 
+before end of cooperative year will be charge 20% of 
+total savings. However, withdrawal payment can 
+take up to 30 days.
+8.6 FLEXIBLE SAVINGS: Suitable for petty traders, 
+student and the general public
+1. Flexible savings, -Save any amount any day as you
+fit
+2. Minimum savings duration is one month (30 days)
+3. NO membership registration, only purchase of
+record card.
+4. NOT Entitled to monthly dividend shares
+5. Entitled to withdraw 100% of savings after 30days,
+FREE withdrawal once in 30 days
+6. 20% charge applies on withdrawal before 30days
+8.7 LOAN
+a. i. All finances shall be available for loan to co￾operative members and members of the community.
+ii. Members of the co-operative and members of the 
+community who need loan shall apply through loan 
+form, loan form must be duly signed by applicant and
+guarantors as may be required based on the amount.
+iii. Loan request above member's savings cannot be 
+granted unless by endorsement of guarantors or by 
+deposit of collateral.
+iv. Loan is for a period of 30days renewable by 
+paying only the interest.
+v. Any member who is yet to pay back loan before 
+the end of co-operative year will not be entitled to 
+his/her savings until payment is completed or except 
+the member consent to means of minus the loan 
+balance from savings.
+vi. If anyone failed to fulfill repayment requirements, 
+in the case where there is deposited collateral, legal 
+procedures shall be applied to recover the funds 
+involved.
+b. GROUP LOAN
+-REQUIREMENTS
+i. Minimum of three members
+ii. Purchase of nonrefundable application form
+iii. 10% deposit of loan amount as collateral
+iv. Must provide a guarantor (preferably a member 
+of TMCS LTD)
+-CONDITIONS
+i. Every member of the group will be held responsible
+if any member defaulted
+ii. No disbursement or withdrawal in the case of any 
+default
+4
+c. COLLATERAL
+i. As the case may be, the cooperative may demand 
+for collateral before grant of loan
+ii. Failure to pay on the due date means the collateral
+has been confiscated as a property of TAIMAKO 
+MULTIPURPOSE COOPERATIVE SOCIETY LTD.
+8.8 DUTIES OF A GUARANTOR
+A guarantor -preferably an active member of the co￾operative society and:
+i. shall personally guarantee repayment of the loan
+ii. Must authenticate the capability of the borrower
+iii. Shall be held responsible to pay the loan if the 
+beneficiary failed to pay.
+8.9
+9.0 CO-OPERATIVE MEETINGS
+i. AGM
+ii. Executive Council Meeting
+iii. Emergency Meeting
+iv. Training and Seminar
+9.1 SOURCE OF FUNDS
+i. Members contribution
+ii. Investors
+iii. Application forms
+iv. Loan interest
+v. Business profit
+vi. Bank loan
+9.2 SOURCE OF CO-OPERATIVE FUNDS
+i. Registration fee
+ii. Renewal fee
+iii. Business profit
+9.3 CUSTODY OF FUNDS
+Co-operative funds not required for immediate use 
+may be invested in any legal yielding business
+9.4 OPERATION OF BANK ACCOUNT
+The executive council shall operate the society's bank
+accounts whereby the chairman, assistant chairman, 
+secretary and treasurer shall serve as signatories in 
+the following order:
+Category A: 1. Chairman 2. Assistant Chairman
+Category B: 1. Secretary 2. Treasurer
+MANDATE
+A+B (One signatory from each category makes valid 
+transaction)
+9.5 BOOKS AND ACCOUNTS
+a. PRESCRIBED BOOK AND RECORDS:
+Accounts and records shall be maintained in the 
+forms prescribed by the Registrar and shall include 
+the following:
+i. Membership register showing the names, 
+addresses and occupations of members, the date of 
+admission to membership.
+ii. Attendance register: members’ attendance at 
+meetings.
+ii. General ledger: A cash book showing the receipts, 
+expenditure and balance on day to day business of 
+the Society.
+iii. Personal ledger for each member
+iv. Loan Register showing installments for repayment
+of loans.
+v. Minutes book for proceedings of General and 
+Management Council meetings.
+vi. Loan Bond files containing bonds for all loans 
+issued.
+vii. Such other records as may be prescribed by the 
+Registrar.
+b. PASS BOOK:
+i. Every member shall keep and maintain a passbook 
+showing particulars of his accounts with the society.
+ii. Every registered member or beneficiary of TMCS 
+LTD shall obtain this membership passbook at a fee 
+decided at the last AGM
+iii. Every passbook holder must present the card at all
+payment occasion for record purposes. Card 
+replacement shall be made at same amount.
+5
+9.6 AMENDMENT OF THE BYE-LAW
+An amendment of TAIMAKO MULTI-PURPOSE 
+COOPERATIVE SOCIETY LIMITED bye laws shall be 
+made by a resolution of members of the society at a 
+General Meeting.
+9.7 DISCIPLINARY PROCEDURES:
+i. The Management Committee shall have the power 
+to suspend any erring member of the co-operative 
+for gross Misconduct. Gross misconduct includes all 
+actions and behaviors deemed by members as 
+constituting a hindrance to the smooth conduct of 
+the co-operative activities. Others include deliberate 
+failure to implement the decisions of the 
+Management Council or any other misconduct 
+deemed to constitute gross indiscipline.
+ii. All decision taken in any meeting applies to all 
+members of the cooperative either present or 
+absent.
+ (iv) The decision to suspend an erring member of 
+the Management Council shall be endorsed by, at 
+least, 2/3 majority of the members of the 
+Management Council.
+9.8 OFFICERS AND THEIR DUTIES
+The Chairman
+Is the Chairman of the Management Council and 
+Board of the Cooperative Society.
+b. He/She is the Chief Executive Officer of the Society
+that executes and controls the day to day activities of
+the society.
+c. He's responsible for administrative and investment
+decisions.
+d. He/She calls for the monthly and emergency 
+meeting of the Executive Council.
+ii. The Vice-Chairman
+The duties of the Vice-Chairman shall be:
+a. Shall assist the Chairman in the discharge of his 
+duties
+b. Shall perform duties assigned to him/her by the 
+Chairman Shall act as the Chairman in his/her 
+absence on the consent of the Chairman.
+d. Any other duty that may be assigned from time to 
+time.
+iii. Secretary.
+The duties of the Secretary shall be:
+a. To take and keep minutes of the Society's 
+meetings
+b. To extract, circulate and implement Executive 
+decisions
+c. To receive and respond to all correspondences as 
+directed by the Executive Council.
+d. To receive all loan applications and bring same 
+before the Management Committee.
+e. To summon all meetings of the co-operative 
+society as directed by the chairman
+f. Any other duty assigned by the Management 
+Committee
+iv. Assistant Secretary
+The duties of the Assistant Secretary
+The Assistant Secretary
+a. Shall assist the Secretary in the discharge of 
+his duties,
+b. Shall perform duties assigned to him/her by 
+the Secretary
+c. Shall act as the Secretary in his/her absence 
+on the consent of the Secretary.
+d. Any other duty that may be assigned from time
+to time by the Management Committee.
+v. Treasurer
+The duties of the Treasurer shall be to:
+a. Receive and take charge of all monies belonging to
+the co-operative society.
+b. Keep record of such monies on the prescribed 
+form and of all monies paid to other members of the 
+society.
+c. Disburse money to any members of the society as 
+approved by the Executive committee.
+6
+d. Keep, separate, all monies belonging to the society
+and on no account shall co-operative society monies 
+be used for other activities.
+e. Shall give account at all times when called upon by
+the Management Committee, the Registrar, the 
+Auditor or any other person authorized by law.
+vi. Financial Secretary
+a. Record all transaction of the society in the 
+appropriate books
+b. Issue receipt and .other documents as prescribed 
+by the Management Committee.
+c. Prepare all payment vouchers and act as directed 
+by the Management Committee
+d. Prepare all financial reports including the Annual 
+Accounts such as Income and Expenditure Account, 
+Cash Flow Statement, Balance Sheet, etc for the 
+Management Committee.
+e. Perform any other duty as may be assigned by the 
+Management Committee.
+9.9 CONSTITUTION AND DUTIES OF ANNUAL 
+GENERAL MEETING (AGM)
+Is the General Body of members, shall meet once a 
+year to direct the affairs/activities of the Society 
+during the Annual General Meeting (AGM).
+a. Quorum:
+a. The presence of at least 2/3 of members shall be 
+mandatory for the conduct of deliberations and 
+resolutions at the Annual General Meeting (AGM). 
+Thus the presence of 2/3 of members therefore shall 
+form a quorum. When there is no quorum at the 
+Annual General Meeting, a motion for Adjournment 
+shall be moved and seconded before a new date is 
+fixed for the AGM.
+b. lf at the adjourned date and a quorum is not 
+formed, the AGM shall hold regardless of a quorum.
+c. The AGM shall hold not later than 30th November 
+every year.
+The duties of the AGM shall be:
+i. To consider the reports of the Management 
+Committee and the annual accounts analysis as 
+prepared by the Financial Secretary or the person 
+authorized to do so.
+ii. To decide, approve or review any co-operative 
+function or program
+iii. To take decision on any major issue critical to the 
+growth and development of the society and to the 
+advantage and benefit of members.
+10.0 TRUSTEES:
+i. The Management Committee shall be the trustees 
+of the co-operative Society and shall be responsible 
+for the policy formulation and advisory matters, 
+acquisition and disposal of the Society's assets and 
+liabilities as may be approved by the management, 
+shall propose and apply for any Government funds 
+allocation for cooperative societies or Bank loan 
+within payable capacity for especially farmers and 
+other business owners
+ii. Shall act on behalf of the co-operative Society on 
+all legal matters or engage the services of a legal 
+practitioner.
+iii. They are also empowered to engage the services 
+of any consultant or professional as the need arises.
+10.1 SEAL
+The Secretary shall keep in safe custody the seal of 
+the co-operative society on behalf of the Trustees. 
+The seal shall be of a kind approved by the Registrar. 
+Documents shall be signed by at least two of the 
+Trustees, one of which shall be the Secretary.
+THIS COPY OF THE BYE LAW IS UNDER PUBLICATION
+PROCESS; HOWEVER, UNTIL FINAL COPY OF THE BYE
+LAW IS FULFILLED, THIS SERVES AS MEMBERSHIP 
+HANDBOOK AND BINDING AUTHORITY UPON ALL 
+MEMBERS AND CLIENTS.
+7
+Updated -October 2025""".trimIndent(),
+        style = MaterialTheme.typography.bodyLarge
+    )
 }
-
 
 @Composable
 fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
