@@ -53,7 +53,8 @@ fun TaimakoApp() {
                 "CREDIT CASH" -> CreditCashPage { page = "ADMIN DASHBOARD" }
                 "APPROVALS" -> ApprovalsPage { page = "ADMIN DASHBOARD" }
                 "MEMBERS" -> MembersPage { page = "ADMIN DASHBOARD" }
-                "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "CREATE ADMIN" -> CreateAdminPage { page = "ADMIN DASHBOARD" }
+                "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -582,6 +583,39 @@ fun AdminDashboardPage(open: (String) -> Unit, back: () -> Unit) {
             }
             Spacer(Modifier.height(10.dp))
         }
+    }
+}
+
+@Composable
+fun CreateAdminPage(back: () -> Unit) {
+    var fullName by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var tempPassword by remember { mutableStateOf("") }
+    val validUsername = username.length >= 4 && username.all { it.isLetterOrDigit() }
+    val validPassword = tempPassword.length >= 4
+    val ready = fullName.isNotBlank() && validUsername && validPassword
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("CREATE ADMIN", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Create another Admin account. Permissions will be assigned separately under ADMIN PERMISSIONS.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(value=fullName, onValueChange={fullName=it}, label={Text("Admin Full Name")}, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(value=username, onValueChange={v -> if (v.all { it.isLetterOrDigit() }) username=v}, label={Text("Admin Username")}, modifier=Modifier.fillMaxWidth())
+        Text("Use at least 4 letters or numbers.", color=Color.Gray, style=MaterialTheme.typography.bodySmall, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(value=tempPassword, onValueChange={tempPassword=it}, label={Text("Temporary Password")}, modifier=Modifier.fillMaxWidth())
+        Text("Temporary password is for initial Admin access. Secure password handling will be connected with backend authentication.", color=Color.Gray, style=MaterialTheme.typography.bodySmall, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(20.dp))
+        Button(onClick={}, enabled=ready, modifier=Modifier.height(46.dp), contentPadding=PaddingValues(horizontal=24.dp, vertical=6.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) {
+            Text("CREATE ADMIN", fontWeight=FontWeight.Bold)
+        }
+        Spacer(Modifier.height(16.dp))
+        Text("Stage 13 interface only — no Admin account is created until the backend and authentication system are connected.", color=Color.Gray, textAlign=TextAlign.Center)
     }
 }
 
