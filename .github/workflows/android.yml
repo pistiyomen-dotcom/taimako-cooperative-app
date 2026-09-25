@@ -3,6 +3,10 @@ on:
   workflow_dispatch:
   push:
     branches: [ stage-1-public-app ]
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,7 +21,15 @@ jobs:
           gradle-version: '8.9'
       - name: Build debug APK
         run: gradle :app:assembleDebug
+      - name: Prepare direct-install APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk TAIMAKO-Stage-1-Test.apk
       - uses: actions/upload-artifact@v4
         with:
           name: taimako-stage1-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: TAIMAKO-Stage-1-Test.apk
+      - name: Publish Stage 1 test APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete stage-1-test --yes --cleanup-tag || true
+          gh release create stage-1-test TAIMAKO-Stage-1-Test.apk --title "TAIMAKO Stage 1 Test" --notes "Installable Stage 1 test APK. Public interface test build."
