@@ -52,7 +52,8 @@ fun TaimakoApp() {
                 "CREATE MEMBER" -> CreateMemberPage { page = "ADMIN DASHBOARD" }
                 "CREDIT CASH" -> CreditCashPage { page = "ADMIN DASHBOARD" }
                 "APPROVALS" -> ApprovalsPage { page = "ADMIN DASHBOARD" }
-                "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "MEMBERS" -> MembersPage { page = "ADMIN DASHBOARD" }
+                "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -807,5 +808,78 @@ fun ApprovalsPage(back: () -> Unit) {
 
         Spacer(Modifier.height(16.dp))
         Text("Final workflow: APPROVE will automatically post the verified amount to the selected member account destination. Admin must not credit the same transfer manually. REJECT will leave the member balance unchanged.", color=Color.Gray, textAlign=TextAlign.Center)
+    }
+}
+
+
+@Composable
+fun MembersPage(back: () -> Unit) {
+    var username by remember { mutableStateOf("") }
+    var searched by remember { mutableStateOf(false) }
+    val validUsername = username.length == 5 && username.all { it.isDigit() }
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("MEMBERS", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Search a member account by the 5-digit username.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(
+            value=username,
+            onValueChange={ value ->
+                if (value.length <= 5 && value.all { it.isDigit() }) {
+                    username=value
+                    searched=false
+                }
+            },
+            label={Text("Member Username (5 digits)")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
+        Button(
+            onClick={searched=true},
+            enabled=validUsername,
+            modifier=Modifier.height(44.dp),
+            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
+        ) { Text("SEARCH MEMBER", fontWeight=FontWeight.Bold) }
+
+        if (searched) {
+            Spacer(Modifier.height(16.dp))
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+                    Text("MEMBER ACCOUNT", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), style=MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(10.dp))
+                    Text("FULL NAME", fontWeight=FontWeight.Bold)
+                    Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center)
+                    Spacer(Modifier.height(6.dp))
+                    Text("USERNAME", fontWeight=FontWeight.Bold)
+                    Text(username, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(14.dp))
+
+                    val fields = listOf(
+                        "REGISTRATION" to "₦0",
+                        "REGULAR" to "₦0",
+                        "TARGET" to "₦0",
+                        "CONSTANT" to "₦0",
+                        "WELFARE" to "₦0",
+                        "FLEXIBLE" to "₦0",
+                        "TOTAL SAVINGS" to "₦0",
+                        "ACTIVE LOAN" to "₦0",
+                        "LOAN INTEREST" to "₦0"
+                    )
+                    fields.forEach { (label,value) ->
+                        Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) {
+                            Text(label, fontWeight=FontWeight.Bold, modifier=Modifier.weight(1f))
+                            Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold)
+                        }
+                    }
+                }
+            }
+            Spacer(Modifier.height(10.dp))
+            Text("Stage 12 preview uses placeholder account values. The backend will return the exact member full name and live balances for the searched username.", color=Color.Gray, textAlign=TextAlign.Center)
+        }
     }
 }
