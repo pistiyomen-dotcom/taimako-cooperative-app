@@ -41,6 +41,11 @@ fun TaimakoApp() {
                 "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
                 "LOGIN" -> LoginPage { page = "MEMBERSHIP" }
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
+                "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
+                "PAY" -> MemberPlaceholderPage("PAY") { page = "MEMBER DASHBOARD" }
+                "TRANSACTION HISTORY" -> MemberPlaceholderPage("TRANSACTION HISTORY") { page = "MEMBER DASHBOARD" }
+                "WITHDRAW" -> MemberPlaceholderPage("WITHDRAW") { page = "MEMBER DASHBOARD" }
+                "APPLY FOR LOAN" -> MemberPlaceholderPage("APPLY FOR LOAN") { page = "MEMBER DASHBOARD" }
                 else -> InfoPage(page) { page = "HOME" }
             }
         }
@@ -157,7 +162,7 @@ fun LoginPage(back: () -> Unit) {
         Spacer(Modifier.height(10.dp))
         OutlinedTextField(password,{password=it},label={Text("Password")},modifier=Modifier.fillMaxWidth())
         Spacer(Modifier.height(16.dp))
-        Button(onClick={}, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
+        Button(onClick={/* Stage 3 UI preview: backend authentication comes later */}, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
         Spacer(Modifier.height(12.dp))
         Text("Stage 2 interface test only. Authentication will be connected to the backend in a controlled later step.")
     }
@@ -184,4 +189,55 @@ fun ByeLawPage() {
     Text("The cooperative Bye-law will be presented here in clearly arranged sections for public reading.")
     Spacer(Modifier.height(12.dp))
     Text("The full approved Bye-law text will be entered in a controlled step so that the wording is preserved accurately.")
+}
+
+
+@Composable
+fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("MEMBER DASHBOARD", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 3 interface preview — sample values only.", color=Color.Gray)
+        Spacer(Modifier.height(18.dp))
+        val fields = listOf(
+            "REGISTRATION" to "₦0",
+            "REGULAR" to "₦0",
+            "TARGET" to "₦0",
+            "CONSTANT" to "₦0",
+            "WELFARE" to "₦0",
+            "FLEXIBLE" to "₦0",
+            "TOTAL SAVINGS — CURRENT MONTH" to "₦0",
+            "NUMBER OF SHARES" to "0",
+            "DIVIDEND — PREVIOUS MONTH" to "₦0",
+            "ACTIVE LOAN" to "₦0",
+            "PAYMENT DUE DATE" to "—",
+            "LOAN INTEREST" to "₦0"
+        )
+        fields.forEach { (label, value) ->
+            Card(Modifier.fillMaxWidth().padding(vertical=5.dp)) {
+                Row(Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement=Arrangement.SpaceBetween) {
+                    Text(label, fontWeight=FontWeight.Bold, modifier=Modifier.weight(1f))
+                    Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold)
+                }
+            }
+        }
+        Spacer(Modifier.height(16.dp))
+        listOf("PAY","TRANSACTION HISTORY","WITHDRAW","APPLY FOR LOAN").forEach { item ->
+            Button(onClick={open(item)}, modifier=Modifier.fillMaxWidth().height(54.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) { Text(item) }
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+fun MemberPlaceholderPage(title: String, back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text(title, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(16.dp))
+        Text("Stage 3 navigation test only. This function will be implemented and connected in a later controlled step.")
+    }
 }
