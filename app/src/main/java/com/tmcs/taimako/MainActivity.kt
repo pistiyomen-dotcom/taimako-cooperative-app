@@ -50,7 +50,8 @@ fun TaimakoApp() {
                 "ADMIN LOGIN" -> AdminLoginPage(login = { page = "ADMIN DASHBOARD" }, back = { page = "HOME" })
                 "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "ADMIN LOGIN" })
                 "CREATE MEMBER" -> CreateMemberPage { page = "ADMIN DASHBOARD" }
-                "CREDIT CASH", "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "CREDIT CASH" -> CreditCashPage { page = "ADMIN DASHBOARD" }
+                "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -662,5 +663,97 @@ fun CreateMemberPage(back: () -> Unit) {
                 Text("• Member username: exactly 5 numeric digits.\n• Initial password: exactly 4 numeric digits.\n• Temporary password will expire after the first successful login.\n• Admin will not be able to read the member's new personal password.", textAlign=TextAlign.Start, modifier=Modifier.fillMaxWidth())
             }
         }
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CreditCashPage(back: () -> Unit) {
+    var username by remember { mutableStateOf("") }
+    var memberChecked by remember { mutableStateOf(false) }
+    var selected by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var amount by remember { mutableStateOf("") }
+    val destinations = listOf("REGULAR","TARGET","CONSTANT","WELFARE","FLEXIBLE","LOAN","INTEREST","REGISTRATION")
+    val usernameValid = username.length == 5 && username.all { it.isDigit() }
+    val amountValid = amount.toLongOrNull()?.let { it > 0 } == true
+    val ready = memberChecked && selected.isNotBlank() && amountValid
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("CREDIT CASH", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Office cash payment — Stage 10 interface test only.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(
+            value=username,
+            onValueChange={ value ->
+                if (value.length <= 5 && value.all { it.isDigit() }) {
+                    username=value
+                    memberChecked=false
+                }
+            },
+            label={Text("Member Username (5 digits)")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
+        Button(
+            onClick={memberChecked=true},
+            enabled=usernameValid,
+            modifier=Modifier.height(44.dp),
+            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
+        ) { Text("SEARCH MEMBER", fontWeight=FontWeight.Bold) }
+
+        if (memberChecked) {
+            Spacer(Modifier.height(12.dp))
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+                    Text("MEMBER FOUND", fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
+                    Text("Username: $username", fontWeight=FontWeight.Bold)
+                    Text("Member full name will be displayed here after backend connection.", color=Color.Gray, textAlign=TextAlign.Center)
+                }
+            }
+
+            Spacer(Modifier.height(14.dp))
+            ExposedDropdownMenuBox(expanded=expanded, onExpandedChange={expanded=!expanded}) {
+                OutlinedTextField(
+                    value=selected,
+                    onValueChange={},
+                    readOnly=true,
+                    label={Text("Credit To")},
+                    trailingIcon={ExposedDropdownMenuDefaults.TrailingIcon(expanded=expanded)},
+                    modifier=Modifier.menuAnchor().fillMaxWidth()
+                )
+                ExposedDropdownMenu(expanded=expanded, onDismissRequest={expanded=false}) {
+                    destinations.forEach { item ->
+                        DropdownMenuItem(text={Text(item)}, onClick={selected=item; expanded=false})
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(12.dp))
+            OutlinedTextField(
+                value=amount,
+                onValueChange={ value -> if (value.all { it.isDigit() }) amount=value },
+                label={Text("Cash Amount (₦)")},
+                modifier=Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(18.dp))
+            Button(
+                onClick={},
+                enabled=ready,
+                modifier=Modifier.height(44.dp),
+                contentPadding=PaddingValues(horizontal=20.dp, vertical=4.dp),
+                colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+            ) { Text("CONFIRM CREDIT", fontWeight=FontWeight.Bold) }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Text("Final system rule: office cash credit will post immediately after Admin confirmation. It will not require the transfer-receipt approval workflow. No balance is changed in this Stage 10 test build.", color=Color.Gray, textAlign=TextAlign.Center)
     }
 }
