@@ -49,7 +49,7 @@ fun TaimakoApp() {
 
 @Composable
 fun HomePage(open: (String) -> Unit) {
-    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","ABOUT US","CONTACT US")
+    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US")
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -85,6 +85,7 @@ fun InfoPage(page: String, back: () -> Unit) {
             "INVESTMENT" -> Text("Members and non-members can participate in the TMCS LTD Investment Plan.\n\nMinimum investment: ₦10,000\nMinimum duration: 6 months\nReturn on Investment: 1% monthly, unconditional.")
             "AGRICULTURE" -> Text("COMING SOON", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold)
             "FLEXIBLE" -> Text("Suitable for petty traders, students and the general public.\n\n• Save any amount any day.\n• Minimum duration: 30 days.\n• No membership registration; purchase of record card only.\n• No monthly dividend shares.\n• Withdraw 100% after 30 days.\n• One free withdrawal every 30 days.\n• 20% charge for withdrawal before 30 days.")
+            "BYE-LAW" -> ByeLawPage()
             "ABOUT US" -> AboutPage()
             "CONTACT US" -> ContactPage()
         }
@@ -173,4 +174,14 @@ fun RegisterPage(contact: () -> Unit, back: () -> Unit) {
         Spacer(Modifier.height(16.dp))
         Button(onClick=contact, modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("CONTACT US TO REGISTER") }
     }
+}
+
+
+@Composable
+fun ByeLawPage() {
+    Text("TMCS LTD BYE-LAW", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+    Spacer(Modifier.height(12.dp))
+    Text("The cooperative Bye-law will be presented here in clearly arranged sections for public reading.")
+    Spacer(Modifier.height(12.dp))
+    Text("The full approved Bye-law text will be entered in a controlled step so that the wording is preserved accurately.")
 }
