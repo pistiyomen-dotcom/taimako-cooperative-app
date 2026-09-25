@@ -1,0 +1,1 @@
+{"name":"taimako-new-backend","version":"1.0.0","private":true,"scripts":{"start":"node src/server.js"},"dependencies":{"bcryptjs":"^2.4.3","express":"^4.21.2","jsonwebtoken":"^9.0.2","pg":"^8.13.3"}}
