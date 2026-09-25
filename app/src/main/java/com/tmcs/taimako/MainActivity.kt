@@ -292,13 +292,14 @@ fun PayPage(back: () -> Unit) {
 
         Card(Modifier.fillMaxWidth()) {
             Column(Modifier.padding(14.dp)) {
-                Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
-                Spacer(Modifier.height(6.dp))
-                Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically) {
-                    Text("Account Number: 1027050172", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, modifier=Modifier.weight(1f))
-                    TextButton(onClick={ clipboardManager.setText(AnnotatedString("1027050172")) }) { Text("COPY") }
+                Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+                Spacer(Modifier.height(10.dp))
+                Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically, horizontalArrangement=Arrangement.Center) {
+                    Text("Account Number: 1027050172", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center)
+                    Spacer(Modifier.width(4.dp))
+                    TextButton(onClick={ clipboardManager.setText(AnnotatedString("1027050172")) }, contentPadding=PaddingValues(horizontal=6.dp, vertical=2.dp)) { Text("COPY", style=MaterialTheme.typography.labelSmall) }
                 }
-                Text("Bank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, lineHeight=24.sp)
+                Text("Bank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, lineHeight=28.sp, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
             }
         }
 
@@ -330,7 +331,8 @@ fun PayPage(back: () -> Unit) {
         Spacer(Modifier.height(14.dp))
         Button(
             onClick={receiptPicker.launch("image/*")},
-            modifier=Modifier.align(Alignment.CenterHorizontally),
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(44.dp),
+            contentPadding=PaddingValues(horizontal=12.dp, vertical=4.dp),
             colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
         ) { Text(if(receiptName.isBlank()) "UPLOAD PAYMENT RECEIPT" else "RECEIPT SELECTED ✓") }
 
@@ -340,7 +342,8 @@ fun PayPage(back: () -> Unit) {
         Button(
             onClick={},
             enabled=amount.isNotBlank() && amount.toLongOrNull()?.let { it > 0 } == true && selected.isNotBlank() && receiptName.isNotBlank(),
-            modifier=Modifier.align(Alignment.CenterHorizontally).height(54.dp),
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(44.dp),
+            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
             colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
         ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
         Spacer(Modifier.height(10.dp))
