@@ -290,7 +290,7 @@ fun PayPage(back: () -> Unit) {
             Column(Modifier.padding(14.dp)) {
                 Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
                 Spacer(Modifier.height(6.dp))
-                Text("Official TMCS LTD bank account details will be inserted here before live payment submission is enabled.")
+                Text("Account Number: 1027050172\nBank Name: FCMB\nAccount Name: TAIMAKO MULTI-PURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold)
             }
         }
 
