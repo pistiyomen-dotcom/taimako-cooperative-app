@@ -4,6 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -43,7 +45,7 @@ fun TaimakoApp() {
                 "LOGIN" -> LoginPage(login = { page = "MEMBER DASHBOARD" }, back = { page = "MEMBERSHIP" })
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
-                "PAY" -> MemberPlaceholderPage("PAY") { page = "MEMBER DASHBOARD" }
+                "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> MemberPlaceholderPage("TRANSACTION HISTORY") { page = "MEMBER DASHBOARD" }
                 "WITHDRAW" -> MemberPlaceholderPage("WITHDRAW") { page = "MEMBER DASHBOARD" }
                 "APPLY FOR LOAN" -> MemberPlaceholderPage("APPLY FOR LOAN") { page = "MEMBER DASHBOARD" }
@@ -262,5 +264,78 @@ fun MemberPlaceholderPage(title: String, back: () -> Unit) {
         Text(title, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Spacer(Modifier.height(16.dp))
         Text("Stage 3 navigation test only. This function will be implemented and connected in a later controlled step.")
+    }
+}
+
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PayPage(back: () -> Unit) {
+    var amount by remember { mutableStateOf("") }
+    var selected by remember { mutableStateOf("") }
+    var expanded by remember { mutableStateOf(false) }
+    var receiptName by remember { mutableStateOf("") }
+    val destinations = listOf("REGULAR","TARGET","CONSTANT","WELFARE","FLEXIBLE","LOAN","INTEREST","REGISTRATION")
+    val receiptPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        receiptName = if (uri != null) "Receipt selected" else ""
+    }
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("PAY", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), modifier=Modifier.fillMaxWidth(), textAlign=TextAlign.Center)
+        Spacer(Modifier.height(16.dp))
+
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp)) {
+                Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+                Spacer(Modifier.height(6.dp))
+                Text("Official TMCS LTD bank account details will be inserted here before live payment submission is enabled.")
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        OutlinedTextField(
+            value=amount,
+            onValueChange={ value -> if (value.all { it.isDigit() }) amount=value },
+            label={Text("Amount (₦)")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(12.dp))
+
+        ExposedDropdownMenuBox(expanded=expanded, onExpandedChange={expanded=!expanded}) {
+            OutlinedTextField(
+                value=selected,
+                onValueChange={},
+                readOnly=true,
+                label={Text("Pay For")},
+                trailingIcon={ExposedDropdownMenuDefaults.TrailingIcon(expanded=expanded)},
+                modifier=Modifier.menuAnchor().fillMaxWidth()
+            )
+            ExposedDropdownMenu(expanded=expanded, onDismissRequest={expanded=false}) {
+                destinations.forEach { item ->
+                    DropdownMenuItem(text={Text(item)}, onClick={selected=item; expanded=false})
+                }
+            }
+        }
+
+        Spacer(Modifier.height(14.dp))
+        Button(
+            onClick={receiptPicker.launch("image/*")},
+            modifier=Modifier.fillMaxWidth(),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
+        ) { Text(if(receiptName.isBlank()) "UPLOAD PAYMENT RECEIPT" else "RECEIPT SELECTED ✓") }
+
+        Spacer(Modifier.height(8.dp))
+        Text("Payment receipt is required before submission.", color=Color.Gray)
+        Spacer(Modifier.height(16.dp))
+        Button(
+            onClick={},
+            enabled=amount.isNotBlank() && amount.toLongOrNull()?.let { it > 0 } == true && selected.isNotBlank() && receiptName.isNotBlank(),
+            modifier=Modifier.fillMaxWidth().height(54.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+        ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
+        Spacer(Modifier.height(10.dp))
+        Text("Stage 4 interface test only. SUBMIT does not send or credit money yet.", color=Color.Gray)
     }
 }
