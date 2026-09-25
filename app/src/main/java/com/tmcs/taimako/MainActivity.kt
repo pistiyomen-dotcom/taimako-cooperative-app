@@ -49,7 +49,7 @@ fun TaimakoApp() {
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
-                "TRANSACTION HISTORY" -> MemberPlaceholderPage("TRANSACTION HISTORY") { page = "MEMBER DASHBOARD" }
+                "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
                 "WITHDRAW" -> MemberPlaceholderPage("WITHDRAW") { page = "MEMBER DASHBOARD" }
                 "APPLY FOR LOAN" -> MemberPlaceholderPage("APPLY FOR LOAN") { page = "MEMBER DASHBOARD" }
                 else -> InfoPage(page) { page = "HOME" }
@@ -348,5 +348,48 @@ fun PayPage(back: () -> Unit) {
         ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
         Spacer(Modifier.height(10.dp))
         Text("Stage 4 interface test only. SUBMIT does not send or credit money yet.", color=Color.Gray)
+    }
+}
+
+
+@Composable
+fun TransactionHistoryPage(back: () -> Unit) {
+    val sampleTransactions = listOf(
+        Triple("REGULAR", "₦0", "—"),
+        Triple("TARGET", "₦0", "—"),
+        Triple("CONSTANT", "₦0", "—"),
+        Triple("WELFARE", "₦0", "—"),
+        Triple("FLEXIBLE", "₦0", "—")
+    )
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("TRANSACTION HISTORY", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 5 interface preview — no live transaction records yet.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+
+        Card(Modifier.fillMaxWidth()) {
+            Row(Modifier.fillMaxWidth().padding(12.dp), horizontalArrangement=Arrangement.SpaceBetween) {
+                Text("TYPE", fontWeight=FontWeight.Bold)
+                Text("AMOUNT", fontWeight=FontWeight.Bold)
+                Text("DATE", fontWeight=FontWeight.Bold)
+            }
+        }
+        Spacer(Modifier.height(8.dp))
+
+        sampleTransactions.forEach { (type, amount, date) ->
+            Card(Modifier.fillMaxWidth()) {
+                Row(Modifier.fillMaxWidth().padding(14.dp), verticalAlignment=Alignment.CenterVertically) {
+                    Text(type, fontWeight=FontWeight.Bold, modifier=Modifier.weight(1.2f))
+                    Text(amount, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, textAlign=TextAlign.Center, modifier=Modifier.weight(1f))
+                    Text(date, textAlign=TextAlign.End, modifier=Modifier.weight(1f))
+                }
+            }
+            Spacer(Modifier.height(8.dp))
+        }
+
+        Spacer(Modifier.height(10.dp))
+        Text("Approved deposits, cash credits, withdrawals, loan payments and other account movements will appear here after backend integration.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
     }
 }
