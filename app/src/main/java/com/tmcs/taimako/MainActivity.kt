@@ -13,6 +13,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.graphics.Color
 
@@ -197,7 +198,7 @@ fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
         Spacer(Modifier.height(28.dp))
         TextButton(onClick=back) { Text("← BACK") }
-        Text("MEMBER DASHBOARD", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Card(Modifier.fillMaxWidth().height(72.dp)) { Box(Modifier.fillMaxSize(), contentAlignment=Alignment.Center) { Text("MEMBER DASHBOARD", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth()) } }
         Spacer(Modifier.height(6.dp))
         Text("Stage 3 interface preview — sample values only.", color=Color.Gray)
         Spacer(Modifier.height(18.dp))
