@@ -7,11 +7,11 @@ android {
     namespace = "com.tmcs.taimako"
     compileSdk = 35
     defaultConfig {
-        applicationId = "com.tmcs.taimako"
+        applicationId = "com.tmcs.taimako.freshstage1"
         minSdk = 24
         targetSdk = 35
-        versionCode = 1
-        versionName = "0.1-stage1"
+        versionCode = 2
+        versionName = "0.1.1-stage1-install-fix"
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
