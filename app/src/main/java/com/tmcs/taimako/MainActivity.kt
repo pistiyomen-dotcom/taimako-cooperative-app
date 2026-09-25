@@ -713,8 +713,14 @@ fun CreditCashPage(back: () -> Unit) {
             Card(Modifier.fillMaxWidth()) {
                 Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
                     Text("MEMBER FOUND", fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
-                    Text("Username: $username", fontWeight=FontWeight.Bold)
-                    Text("Member full name will be displayed here after backend connection.", color=Color.Gray, textAlign=TextAlign.Center)
+                    Spacer(Modifier.height(6.dp))
+                    Text("FULL NAME", fontWeight=FontWeight.Bold)
+                    Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center)
+                    Spacer(Modifier.height(6.dp))
+                    Text("USERNAME", fontWeight=FontWeight.Bold)
+                    Text(username, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(6.dp))
+                    Text("Stage 10 preview uses a placeholder full name. Backend member search will display the exact full name and username stored on the member account dashboard.", color=Color.Gray, textAlign=TextAlign.Center)
                 }
             }
 
@@ -750,7 +756,7 @@ fun CreditCashPage(back: () -> Unit) {
                 modifier=Modifier.height(44.dp),
                 contentPadding=PaddingValues(horizontal=20.dp, vertical=4.dp),
                 colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
-            ) { Text("CONFIRM CREDIT", fontWeight=FontWeight.Bold) }
+            ) { Text("CONFIRM", fontWeight=FontWeight.Bold) }
         }
 
         Spacer(Modifier.height(16.dp))
