@@ -848,38 +848,45 @@ fun MembersPage(back: () -> Unit) {
 
         if (searched) {
             Spacer(Modifier.height(16.dp))
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-                    Text("MEMBER ACCOUNT", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), style=MaterialTheme.typography.titleLarge)
-                    Spacer(Modifier.height(10.dp))
-                    Text("FULL NAME", fontWeight=FontWeight.Bold)
-                    Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center)
-                    Spacer(Modifier.height(6.dp))
-                    Text("USERNAME", fontWeight=FontWeight.Bold)
-                    Text(username, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
-                    Spacer(Modifier.height(14.dp))
+            Card(Modifier.fillMaxWidth().height(72.dp)) {
+                Box(Modifier.fillMaxSize(), contentAlignment=Alignment.Center) {
+                    Text("MEMBER DASHBOARD", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+            Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+            Text("Username: $username", fontWeight=FontWeight.Bold, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+            Spacer(Modifier.height(16.dp))
 
-                    val fields = listOf(
-                        "REGISTRATION" to "₦0",
-                        "REGULAR" to "₦0",
-                        "TARGET" to "₦0",
-                        "CONSTANT" to "₦0",
-                        "WELFARE" to "₦0",
-                        "FLEXIBLE" to "₦0",
-                        "TOTAL SAVINGS" to "₦0",
-                        "ACTIVE LOAN" to "₦0",
-                        "LOAN INTEREST" to "₦0"
-                    )
-                    fields.forEach { (label,value) ->
-                        Row(Modifier.fillMaxWidth().padding(vertical=4.dp)) {
-                            Text(label, fontWeight=FontWeight.Bold, modifier=Modifier.weight(1f))
-                            Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold)
+            val fields = listOf(
+                "REGISTRATION" to "₦0",
+                "REGULAR" to "₦0",
+                "TARGET" to "₦0",
+                "CONSTANT" to "₦0",
+                "WELFARE" to "₦0",
+                "FLEXIBLE" to "₦0",
+                "TOTAL SAVINGS — CURRENT MONTH" to "₦0",
+                "NUMBER OF SHARES" to "0",
+                "DIVIDEND — PREVIOUS MONTH" to "₦0",
+                "ACTIVE LOAN" to "₦0",
+                "PAYMENT DUE DATE" to "—",
+                "LOAN INTEREST" to "₦0"
+            )
+            fields.chunked(2).forEach { pair ->
+                Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                    pair.forEach { (label,value) ->
+                        Card(Modifier.weight(1f).height(92.dp)) {
+                            Column(Modifier.fillMaxSize().padding(8.dp), verticalArrangement=Arrangement.Center, horizontalAlignment=Alignment.CenterHorizontally) {
+                                Text(label, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+                                Spacer(Modifier.height(6.dp))
+                                Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+                            }
                         }
                     }
                 }
+                Spacer(Modifier.height(10.dp))
             }
-            Spacer(Modifier.height(10.dp))
-            Text("Stage 12 preview uses placeholder account values. The backend will return the exact member full name and live balances for the searched username.", color=Color.Gray, textAlign=TextAlign.Center)
+            Text("Stage 12 preview uses placeholder member name and values. Backend search will display the searched member's exact dashboard data.", color=Color.Gray, textAlign=TextAlign.Center)
         }
     }
 }
