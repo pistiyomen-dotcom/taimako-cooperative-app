@@ -51,7 +51,8 @@ fun TaimakoApp() {
                 "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "ADMIN LOGIN" })
                 "CREATE MEMBER" -> CreateMemberPage { page = "ADMIN DASHBOARD" }
                 "CREDIT CASH" -> CreditCashPage { page = "ADMIN DASHBOARD" }
-                "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "APPROVALS" -> ApprovalsPage { page = "ADMIN DASHBOARD" }
+                "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -761,5 +762,50 @@ fun CreditCashPage(back: () -> Unit) {
 
         Spacer(Modifier.height(16.dp))
         Text("Final system rule: office cash credit will post immediately after Admin confirmation. It will not require the transfer-receipt approval workflow. No balance is changed in this Stage 10 test build.", color=Color.Gray, textAlign=TextAlign.Center)
+    }
+}
+
+
+@Composable
+fun ApprovalsPage(back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("APPROVALS", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 11 interface preview — no live submissions yet.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp)) {
+                Text("PENDING BANK TRANSFER", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), modifier=Modifier.fillMaxWidth(), textAlign=TextAlign.Center)
+                Spacer(Modifier.height(10.dp))
+                Text("FULL NAME", fontWeight=FontWeight.Bold)
+                Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.height(6.dp))
+                Text("USERNAME", fontWeight=FontWeight.Bold)
+                Text("12345", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.height(10.dp))
+                Text("PAYMENT DETAILS", fontWeight=FontWeight.Bold)
+                Text("Amount: ₦10,000\nPay For: REGULAR\nReceipt: Payment receipt attached")
+                Spacer(Modifier.height(14.dp))
+                Button(onClick={}, modifier=Modifier.align(Alignment.CenterHorizontally).height(42.dp), contentPadding=PaddingValues(horizontal=14.dp, vertical=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
+                    Text("VIEW RECEIPT", fontWeight=FontWeight.Bold)
+                }
+                Spacer(Modifier.height(14.dp))
+                Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.Center) {
+                    Button(onClick={}, modifier=Modifier.height(42.dp), contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) {
+                        Text("APPROVE", fontWeight=FontWeight.Bold)
+                    }
+                    Spacer(Modifier.width(12.dp))
+                    OutlinedButton(onClick={}, modifier=Modifier.height(42.dp), contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp)) {
+                        Text("REJECT", fontWeight=FontWeight.Bold)
+                    }
+                }
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        Text("Final workflow: APPROVE will automatically post the verified amount to the selected member account destination. Admin must not credit the same transfer manually. REJECT will leave the member balance unchanged.", color=Color.Gray, textAlign=TextAlign.Center)
     }
 }
