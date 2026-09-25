@@ -51,7 +51,7 @@ fun TaimakoApp() {
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
                 "WITHDRAW" -> WithdrawPage { page = "MEMBER DASHBOARD" }
-                "APPLY FOR LOAN" -> MemberPlaceholderPage("APPLY FOR LOAN") { page = "MEMBER DASHBOARD" }
+                "APPLY FOR LOAN" -> LoanApplicationPage { page = "MEMBER DASHBOARD" }
                 else -> InfoPage(page) { page = "HOME" }
             }
         }
@@ -457,5 +457,77 @@ fun WithdrawPage(back: () -> Unit) {
                 TextButton(onClick={accepted=false; showChargeNotice=false}) { Text("DECLINE") }
             }
         )
+    }
+}
+
+
+@Composable
+fun LoanApplicationPage(back: () -> Unit) {
+    var loanAmount by remember { mutableStateOf("") }
+    var guarantor by remember { mutableStateOf("") }
+    // Stage 7 test values only. Backend will supply the member's real savings.
+    val totalSavings = 20000L
+    val ownLoanLimit = (totalSavings * 90) / 100
+    val requested = loanAmount.toLongOrNull() ?: 0L
+    val needsGuarantor = requested > ownLoanLimit
+    val shortfall = if (needsGuarantor) requested - ownLoanLimit else 0L
+    val guarantorFormatValid = guarantor.length == 5 && guarantor.all { it.isDigit() }
+    val canSubmit = requested > 0 && (!needsGuarantor || guarantorFormatValid)
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("APPLY FOR LOAN", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 7 interface test — no loan application will be submitted yet.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(18.dp))
+
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+                Text("TOTAL SAVINGS", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium)
+                Text("₦20,000", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+                Spacer(Modifier.height(8.dp))
+                Text("90% LOAN VALUE", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium)
+                Text("₦18,000", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+        OutlinedTextField(
+            value=loanAmount,
+            onValueChange={ value -> if (value.all { it.isDigit() }) loanAmount=value },
+            label={Text("Loan Amount (₦)")},
+            modifier=Modifier.fillMaxWidth()
+        )
+
+        if (needsGuarantor) {
+            Spacer(Modifier.height(12.dp))
+            Text("Amount above your 90% loan value. Guarantor required.", color=Color(0xFFD4AF37), fontWeight=FontWeight.Bold)
+            Text("Required guarantor savings to cover shortfall: ₦$shortfall", color=Color.Gray)
+            Spacer(Modifier.height(10.dp))
+            OutlinedTextField(
+                value=guarantor,
+                onValueChange={ value -> if (value.length <= 5 && value.all { it.isDigit() }) guarantor=value },
+                label={Text("Guarantor Username (5 digits)")},
+                modifier=Modifier.fillMaxWidth()
+            )
+            Spacer(Modifier.height(6.dp))
+            Text("Stage 7 checks username format only. Guarantor account and savings balance will be verified by the backend.", color=Color.Gray)
+        } else if (requested > 0) {
+            Spacer(Modifier.height(12.dp))
+            Text("Guarantor not required for this amount.", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold)
+        }
+
+        Spacer(Modifier.height(18.dp))
+        Button(
+            onClick={},
+            enabled=canSubmit,
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(44.dp),
+            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+        ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
+
+        Spacer(Modifier.height(12.dp))
+        Text("Member loan term: 30 days. Interest: 5%. Approved loan details will later appear on the Member Dashboard.", color=Color.Gray, textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
     }
 }
