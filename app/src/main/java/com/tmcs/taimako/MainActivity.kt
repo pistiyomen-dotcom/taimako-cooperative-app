@@ -224,7 +224,7 @@ Registered cooperative members can also opt into Flexible Savings through their 
 fun FlexibleEntryPage(open:(String)->Unit,back:()->Unit){Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally){Spacer(Modifier.height(28.dp));TextButton(onClick=back,modifier=Modifier.align(Alignment.Start)){Text("← BACK")};Text("FLEXIBLE",style=MaterialTheme.typography.headlineLarge,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37));Spacer(Modifier.height(20.dp));listOf("LOGIN" to "FLEXIBLE LOGIN","REGISTER" to "FLEXIBLE REGISTER","FLEXIBLE INFO" to "FLEXIBLE INFO").forEach{(label,dest)->Button(onClick={open(dest)},modifier=Modifier.fillMaxWidth().height(58.dp),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A),contentColor=Color.White)){Text(label,fontWeight=FontWeight.Bold)};Spacer(Modifier.height(10.dp))}}}
 
 @Composable
-fun FlexibleLoginPage(login:()->Unit,back:()->Unit){var username by remember{mutableStateOf("")};var pin by remember{mutableStateOf("")};val valid=username.length==4&&username.startsWith("F")&&username.drop(1).all{it.isDigit()}&&pin.length==4&&pin.all{it.isDigit()};Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)){Spacer(Modifier.height(28.dp));TextButton(onClick=back){Text("← BACK")};Text("FLEXIBLE LOGIN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37));Spacer(Modifier.height(16.dp));OutlinedTextField(username,{v->val up=v.uppercase();if(up.length<=4&&(up.isEmpty()||(up.startsWith("F")&&up.drop(1).all{it.isDigit()})))username=up},label={Text("Username (F + 3 digits)")},modifier=Modifier.fillMaxWidth());Spacer(Modifier.height(10.dp));OutlinedTextField(pin,{v->if(v.length<=4&&v.all{it.isDigit()})pin=v},label={Text("4-digit PIN")},modifier=Modifier.fillMaxWidth());Spacer(Modifier.height(16.dp));Button(onClick=login,enabled=valid,modifier=Modifier.fillMaxWidth(),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("LOGIN",fontWeight=FontWeight.Bold)};Spacer(Modifier.height(12.dp));Text("Interface test only. Real username and PIN verification will be connected to the backend.",color=Color.Gray)}}
+fun FlexibleLoginPage(login:()->Unit,back:()->Unit){var username by remember{mutableStateOf("")};var pin by remember{mutableStateOf("")};val valid=username.length==4&&username.startsWith("F")&&username.drop(1).all{it.isDigit()}&&pin.length==4&&pin.all{it.isDigit()};Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)){Spacer(Modifier.height(28.dp));TextButton(onClick=back){Text("← BACK")};Text("FLEXIBLE LOGIN",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37));Spacer(Modifier.height(16.dp));OutlinedTextField(username,{v->val up=v.uppercase();if(up.length<=4&&(up.isEmpty()||(up.startsWith("F")&&up.drop(1).all{it.isDigit()})))username=up},label={Text("Username (F + 3 digits)")},modifier=Modifier.fillMaxWidth());Spacer(Modifier.height(10.dp));OutlinedTextField(pin,{v->if(v.length<=4&&v.all{it.isDigit()})pin=v},label={Text("4-digit PIN")},modifier=Modifier.fillMaxWidth());Spacer(Modifier.height(16.dp));Button(onClick=login,enabled=valid,modifier=Modifier.fillMaxWidth(),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("LOGIN",fontWeight=FontWeight.Bold)};Spacer(Modifier.height(12.dp));Text("Interface test only. Real username and PIN verification will be connected to the backend. The Admin-generated PIN is temporary and must be changed on first successful login before dashboard access.",color=Color.Gray)}}
 
 @Composable
 fun FlexibleDashboardPage(open:(String)->Unit,back:()->Unit){Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally){Spacer(Modifier.height(28.dp));TextButton(onClick=back,modifier=Modifier.align(Alignment.Start)){Text("← BACK")};Card(Modifier.fillMaxWidth().height(72.dp)){Box(Modifier.fillMaxSize(),contentAlignment=Alignment.Center){Text("FLEXIBLE DASHBOARD",style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37),textAlign=TextAlign.Center)}};Spacer(Modifier.height(12.dp));Text("Flexible Saver Full Name",fontWeight=FontWeight.Bold,style=MaterialTheme.typography.titleLarge);Text("Username: F001",fontWeight=FontWeight.Bold);Spacer(Modifier.height(16.dp));Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){listOf("TOTAL SAVINGS" to "₦0","START DATE" to "—").forEach{(label,value)->Card(Modifier.weight(1f).height(100.dp)){Column(Modifier.fillMaxSize().padding(8.dp),verticalArrangement=Arrangement.Center,horizontalAlignment=Alignment.CenterHorizontally){Text(label,fontWeight=FontWeight.Bold,textAlign=TextAlign.Center);Spacer(Modifier.height(6.dp));Text(value,fontWeight=FontWeight.Bold,color=Color(0xFF146B3A),style=MaterialTheme.typography.titleLarge)}}}};Spacer(Modifier.height(18.dp));Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){Button(onClick={open("FLEXIBLE SAVE")},modifier=Modifier.weight(1f),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A),contentColor=Color.White)){Text("SAVE",fontWeight=FontWeight.Bold)};Button(onClick={open("FLEXIBLE WITHDRAW")},modifier=Modifier.weight(1f),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("WITHDRAW",fontWeight=FontWeight.Bold)}};Spacer(Modifier.height(12.dp));Text("Stage preview uses sample saver details. Live values will come from the backend.",color=Color.Gray,textAlign=TextAlign.Center)}}
@@ -313,7 +313,7 @@ fun LoginPage(open: (String) -> Unit, back: () -> Unit) {
             colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
         ) { Text("LOGIN") }
         Spacer(Modifier.height(12.dp))
-        Text("INTERFACE TEST ONLY: the final backend will authenticate the credentials and determine the account role automatically. Members will open the Member Dashboard and Admins will open the Admin Dashboard.", color=Color.Gray)
+        Text("INTERFACE TEST ONLY: the final backend will authenticate credentials and determine the account role. Any Admin-generated password/PIN is temporary and must be changed on the first successful login before dashboard access.", color=Color.Gray)
     }
 }
 
@@ -850,107 +850,42 @@ fun CreateMemberPage(back: () -> Unit) {
         OutlinedTextField(pin,{v->if(v.length<=4&&v.all{it.isDigit()})pin=v},label={Text("4-digit Numeric PIN")},modifier=Modifier.fillMaxWidth()); Spacer(Modifier.height(18.dp))
         Button(onClick={},enabled=ready,colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("CREATE ACCOUNT",fontWeight=FontWeight.Bold)}
         Spacer(Modifier.height(14.dp)); Text(if(accountType=="REGULAR")"Regular username: exactly 5 numeric digits. Login PIN: exactly 4 numeric digits." else "Flexible username: F followed by exactly 3 numeric digits. Login PIN: exactly 4 numeric digits.",color=Color.Gray,textAlign=TextAlign.Center)
-        Text("Interface only — account creation will become live when the backend is connected.",color=Color.Gray,textAlign=TextAlign.Center)
+        Text("The Admin-generated PIN is TEMPORARY. On the first successful login, the user must change it before accessing the account. Interface only until backend authentication is connected.",color=Color.Gray,textAlign=TextAlign.Center)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreditCashPage(back: () -> Unit) {
+    var accountType by remember { mutableStateOf("REGULAR") }
     var username by remember { mutableStateOf("") }
-    var memberChecked by remember { mutableStateOf(false) }
+    var accountChecked by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var amount by remember { mutableStateOf("") }
-    val destinations = listOf("REGULAR","TARGET","CONSTANT","WELFARE","FLEXIBLE","LOAN","INTEREST","REGISTRATION")
-    val usernameValid = username.length == 5 && username.all { it.isDigit() }
-    val amountValid = amount.toLongOrNull()?.let { it > 0 } == true
-    val ready = memberChecked && selected.isNotBlank() && amountValid
+    val regularDestinations = listOf("REGULAR","TARGET","CONSTANT","WELFARE","FLEXIBLE","LOAN","INTEREST","REGISTRATION")
+    val destinations = if(accountType=="REGULAR") regularDestinations else listOf("FLEXIBLE")
+    val usernameValid = if(accountType=="REGULAR") username.length==5 && username.all{it.isDigit()} else username.length==4 && username.startsWith("F") && username.drop(1).all{it.isDigit()}
+    val amountValid = amount.toLongOrNull()?.let{it>0}==true
+    val ready = accountChecked && selected.isNotBlank() && amountValid
 
-    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-        Spacer(Modifier.height(28.dp))
-        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
-        Text("CREDIT CASH", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
-        Spacer(Modifier.height(6.dp))
-        Text("Office cash payment — Stage 10 interface test only.", color=Color.Gray, textAlign=TextAlign.Center)
-        Spacer(Modifier.height(18.dp))
-
-        OutlinedTextField(
-            value=username,
-            onValueChange={ value ->
-                if (value.length <= 5 && value.all { it.isDigit() }) {
-                    username=value
-                    memberChecked=false
-                }
-            },
-            label={Text("Member Username (5 digits)")},
-            modifier=Modifier.fillMaxWidth()
-        )
-        Spacer(Modifier.height(10.dp))
-        Button(
-            onClick={memberChecked=true},
-            enabled=usernameValid,
-            modifier=Modifier.height(44.dp),
-            contentPadding=PaddingValues(horizontal=18.dp, vertical=4.dp),
-            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
-        ) { Text("SEARCH MEMBER", fontWeight=FontWeight.Bold) }
-
-        if (memberChecked) {
-            Spacer(Modifier.height(12.dp))
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
-                    Text("MEMBER FOUND", fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
-                    Spacer(Modifier.height(6.dp))
-                    Text("FULL NAME", fontWeight=FontWeight.Bold)
-                    Text("Member Full Name", color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, textAlign=TextAlign.Center)
-                    Spacer(Modifier.height(6.dp))
-                    Text("USERNAME", fontWeight=FontWeight.Bold)
-                    Text(username, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge)
-                    Spacer(Modifier.height(6.dp))
-                    Text("Stage 10 preview uses a placeholder full name. Backend member search will display the exact full name and username stored on the member account dashboard.", color=Color.Gray, textAlign=TextAlign.Center)
-                }
-            }
-
-            Spacer(Modifier.height(14.dp))
-            ExposedDropdownMenuBox(expanded=expanded, onExpandedChange={expanded=!expanded}) {
-                OutlinedTextField(
-                    value=selected,
-                    onValueChange={},
-                    readOnly=true,
-                    label={Text("Credit To")},
-                    trailingIcon={ExposedDropdownMenuDefaults.TrailingIcon(expanded=expanded)},
-                    modifier=Modifier.menuAnchor().fillMaxWidth()
-                )
-                ExposedDropdownMenu(expanded=expanded, onDismissRequest={expanded=false}) {
-                    destinations.forEach { item ->
-                        DropdownMenuItem(text={Text(item)}, onClick={selected=item; expanded=false})
-                    }
-                }
-            }
-
-            Spacer(Modifier.height(12.dp))
-            OutlinedTextField(
-                value=amount,
-                onValueChange={ value -> if (value.all { it.isDigit() }) amount=value },
-                label={Text("Cash Amount (₦)")},
-                modifier=Modifier.fillMaxWidth()
-            )
-
-            Spacer(Modifier.height(18.dp))
-            Button(
-                onClick={},
-                enabled=ready,
-                modifier=Modifier.height(44.dp),
-                contentPadding=PaddingValues(horizontal=20.dp, vertical=4.dp),
-                colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
-            ) { Text("CONFIRM", fontWeight=FontWeight.Bold) }
-        }
-
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally){
+        Spacer(Modifier.height(28.dp));TextButton(onClick=back,modifier=Modifier.align(Alignment.Start)){Text("← BACK")}
+        Text("CREDIT CASH",style=MaterialTheme.typography.headlineLarge,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37),textAlign=TextAlign.Center,modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(14.dp))
+        Row(Modifier.fillMaxWidth(),horizontalArrangement=Arrangement.spacedBy(10.dp)){listOf("REGULAR","FLEXIBLE").forEach{type->Button(onClick={accountType=type;username="";accountChecked=false;selected=if(type=="FLEXIBLE")"FLEXIBLE" else "";amount=""},modifier=Modifier.weight(1f),colors=ButtonDefaults.buttonColors(containerColor=if(accountType==type)Color(0xFFD4AF37) else Color(0xFF146B3A),contentColor=if(accountType==type)Color.Black else Color.White)){Text(type,fontWeight=FontWeight.Bold)}}}
         Spacer(Modifier.height(16.dp))
-        Text("Final system rule: office cash credit will post immediately after Admin confirmation. It will not require the transfer-receipt approval workflow. No balance is changed in this Stage 10 test build.", color=Color.Gray, textAlign=TextAlign.Center)
+        OutlinedTextField(username,{v->val up=v.uppercase();if(accountType=="REGULAR"){if(up.length<=5&&up.all{it.isDigit()}){username=up;accountChecked=false}}else{if(up.length<=4&&(up.isEmpty()||(up.startsWith("F")&&up.drop(1).all{it.isDigit()}))){username=up;accountChecked=false}}},label={Text(if(accountType=="REGULAR")"Member Username (5 digits)" else "Saver Username (F + 3 digits)")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp));Button(onClick={accountChecked=true;if(accountType=="FLEXIBLE")selected="FLEXIBLE"},enabled=usernameValid,colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A),contentColor=Color.White)){Text(if(accountType=="REGULAR")"SEARCH MEMBER" else "SEARCH SAVER",fontWeight=FontWeight.Bold)}
+        if(accountChecked){Spacer(Modifier.height(12.dp));Card(Modifier.fillMaxWidth()){Column(Modifier.padding(14.dp),horizontalAlignment=Alignment.CenterHorizontally){Text(if(accountType=="REGULAR")"MEMBER FOUND" else "SAVER FOUND",fontWeight=FontWeight.Bold,color=Color(0xFF146B3A));Spacer(Modifier.height(6.dp));Text("FULL NAME",fontWeight=FontWeight.Bold);Text(if(accountType=="REGULAR")"Member Full Name" else "Flexible Saver Full Name",color=Color(0xFF146B3A),fontWeight=FontWeight.Bold,style=MaterialTheme.typography.titleLarge,textAlign=TextAlign.Center);Spacer(Modifier.height(6.dp));Text("USERNAME",fontWeight=FontWeight.Bold);Text(username,color=Color(0xFF146B3A),fontWeight=FontWeight.Bold,style=MaterialTheme.typography.titleLarge)}}
+            Spacer(Modifier.height(14.dp))
+            if(accountType=="REGULAR"){ExposedDropdownMenuBox(expanded=expanded,onExpandedChange={expanded=!expanded}){OutlinedTextField(selected,{},readOnly=true,label={Text("Credit To")},trailingIcon={ExposedDropdownMenuDefaults.TrailingIcon(expanded=expanded)},modifier=Modifier.menuAnchor().fillMaxWidth());ExposedDropdownMenu(expanded=expanded,onDismissRequest={expanded=false}){destinations.forEach{item->DropdownMenuItem(text={Text(item)},onClick={selected=item;expanded=false})}}}} else {OutlinedTextField(selected,{},readOnly=true,label={Text("Credit To")},modifier=Modifier.fillMaxWidth())}
+            Spacer(Modifier.height(12.dp));OutlinedTextField(amount,{v->if(v.all{it.isDigit()})amount=v},label={Text("Cash Amount (₦)")},modifier=Modifier.fillMaxWidth());Spacer(Modifier.height(18.dp))
+            Button(onClick={},enabled=ready,colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("SUBMIT FOR APPROVAL",fontWeight=FontWeight.Bold)}
+        }
+        Spacer(Modifier.height(16.dp));Text("All cash-credit submissions go to Admin approval. No balance changes until an authorized Admin approves the submission.",color=Color.Gray,textAlign=TextAlign.Center)
     }
 }
-
 
 @Composable
 fun ApprovalsPage(back: () -> Unit) {
