@@ -44,6 +44,8 @@ fun TaimakoApp() {
         Surface(Modifier.fillMaxSize()) {
             when (page) {
                 "HOME" -> HomePage { page = it }
+                "SAVINGS" -> SavingsMenuPage(open = { page = it }, back = { page = "HOME" })
+                "REGULAR SAVINGS", "CONSTANT SAVINGS", "TARGET SAVINGS", "WELFARE SAVINGS", "FLEXIBLE SAVINGS" -> SavingsInfoPage(page) { page = "SAVINGS" }
                 "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
                 "LOGIN" -> LoginPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
@@ -111,12 +113,105 @@ fun InfoPage(page: String, back: () -> Unit) {
 }
 
 @Composable
-fun SavingsPage() {
-    Text("Savings plans for registered cooperative members.", fontWeight=FontWeight.Bold)
-    Spacer(Modifier.height(12.dp))
-    Text("REGULAR\nTARGET\nCONSTANT\nWELFARE\nFLEXIBLE")
-    Spacer(Modifier.height(12.dp))
-    Text("Stage 1 navigation is active. Detailed individual savings pages will be added in the next controlled step.")
+fun SavingsMenuPage(open: (String) -> Unit, back: () -> Unit) {
+    val plans = listOf("REGULAR SAVINGS","CONSTANT SAVINGS","TARGET SAVINGS","WELFARE SAVINGS","FLEXIBLE SAVINGS")
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("SAVINGS", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Select a savings type to read its complete information.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+        plans.forEach { plan ->
+            Button(onClick={open(plan)}, modifier=Modifier.fillMaxWidth().height(58.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
+                Text(plan.removeSuffix(" SAVINGS"), fontWeight=FontWeight.Bold)
+            }
+            Spacer(Modifier.height(10.dp))
+        }
+    }
+}
+
+@Composable
+fun SavingsInfoPage(page: String, back: () -> Unit) {
+    val title = page.removeSuffix(" SAVINGS")
+    val info = when(page) {
+        "REGULAR SAVINGS" -> """General savings plan running from November to October.
+
+• Primarily for member savings.
+• Minimum ₦5,000 per share; reviewable at the AGM.
+• Monthly savings are not compulsory and there is no penalty for a missed month.
+• A member is entitled to monthly dividend shares when contribution reaches at least one minimum share.
+• Loan entitlement is up to 90% of savings at 5% interest per 30 days.
+• Total savings are disbursed after the cooperative year ends in October.
+• Dividend is paid at the AGM.
+• Withdrawal before year end requires at least 30 days' notice and attracts a 20% charge."""
+        "CONSTANT SAVINGS" -> """A long-term savings plan separate from Regular Savings.
+
+• Minimum ₦5,000 per share; reviewable by management.
+• Monthly savings are compulsory.
+• Failure to save the minimum share, or any short-saved amount in a month, attracts a 10% charge/penalty which must be paid or deducted.
+• Monthly dividend shares apply when contribution reaches the minimum share.
+• Loan entitlement is up to 90% of savings at 3% interest per 30 days.
+• Savings are not disbursed at the end of the cooperative year; completed-year savings roll into the following year until the savings duration is completed.
+• A minimum balance of ₦300,000 is required after 5 years before withdrawal.
+• Withdrawal under 5 years without achieving the ₦300,000 minimum balance attracts a 20% charge, and the minimum ₦300,000 is maintained until 5 years.
+• If ₦300,000 is not achieved after 5 years, a 5% charge applies to the short-saved amount before disbursement.
+• Excess above ₦300,000 may be withdrawn if the minimum balance is achieved before 5 years.
+• Withdrawal of excess without charge requires at least 30 days' notice."""
+        "TARGET SAVINGS" -> """A savings plan suitable for project plans.
+
+• The member decides a unique savings target.
+• Weekly or monthly minimum savings are calculated from the chosen target.
+• Monthly saving of the monthly target is compulsory.
+• Failure to pay the monthly minimum, or a short-saved amount, attracts a 10% charge.
+• Monthly dividend shares apply when contribution reaches the minimum share.
+• A reward/support equal to 1% of a fulfilled monthly target applies.
+• Minimum target duration is 24 weeks / 6 months.
+• Withdrawal before the target period ends requires at least 30 days' notice and attracts a 20% charge.
+• For a target duration of up to one year, loan entitlement is up to 90% of savings at 3% interest per 30 days."""
+        "WELFARE SAVINGS" -> """A savings plan suitable for education and retirement.
+
+• Contributions are flexible: save any amount on any day.
+• Minimum savings duration is one year.
+• After the savings duration, total savings are spread across a member-chosen welfare/disbursement duration of at least one year.
+• Monthly welfare payment = monthly share + 1% of the current/opening balance, continuing until the end of the selected duration.
+• Monthly dividend shares apply during the savings period.
+• There is no end-of-cooperative-year disbursement.
+• Withdrawal during the savings or welfare period attracts a 20% charge and requires at least 30 days' notice.
+
+Example: Starting balance ₦240,000 over 12 months; base monthly share ₦20,000.
+Month 1: ₦22,400; balance ₦220,000
+Month 2: ₦22,200; balance ₦200,000
+Month 3: ₦22,000; balance ₦180,000
+Month 4: ₦21,800; balance ₦160,000
+Month 5: ₦21,600; balance ₦140,000
+Month 6: ₦21,400; balance ₦120,000
+Month 7: ₦21,200; balance ₦100,000
+Month 8: ₦21,000; balance ₦80,000
+Month 9: ₦20,800; balance ₦60,000
+Month 10: ₦20,600; balance ₦40,000
+Month 11: ₦20,400; balance ₦20,000
+Month 12: ₦20,200; balance ₦0"""
+        else -> """A flexible savings plan suitable for petty traders, students and the general public.
+
+• Save any amount on any day.
+• Minimum savings duration is 30 days.
+• No cooperative membership registration is required; only a record card is purchased.
+• Flexible savers are not entitled to monthly dividend shares.
+• 100% withdrawal is available after 30 days.
+• One free withdrawal is allowed in every 30-day period.
+• Withdrawal before 30 days attracts a 20% charge.
+
+Registered cooperative members can also opt into Flexible Savings through their member account."""
+    }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text(title, style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(16.dp))
+        Text(info)
+        Spacer(Modifier.height(24.dp))
+    }
 }
 
 @Composable
