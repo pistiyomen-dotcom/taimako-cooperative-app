@@ -54,7 +54,7 @@ fun TaimakoApp() {
                 "APPROVALS" -> ApprovalsPage { page = "ADMIN DASHBOARD" }
                 "MEMBERS" -> MembersPage { page = "ADMIN DASHBOARD" }
                 "CREATE ADMIN" -> CreateAdminPage { page = "ADMIN DASHBOARD" }
-                "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "ADMIN PERMISSIONS" -> AdminPermissionsPage { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -616,6 +616,68 @@ fun CreateAdminPage(back: () -> Unit) {
         }
         Spacer(Modifier.height(16.dp))
         Text("Stage 13 interface only — no Admin account is created until the backend and authentication system are connected.", color=Color.Gray, textAlign=TextAlign.Center)
+    }
+}
+
+@Composable
+fun AdminPermissionsPage(back: () -> Unit) {
+    var adminUsername by remember { mutableStateOf("") }
+    var searched by remember { mutableStateOf(false) }
+    var createMember by remember { mutableStateOf(false) }
+    var creditCash by remember { mutableStateOf(false) }
+    var approvals by remember { mutableStateOf(false) }
+    var members by remember { mutableStateOf(false) }
+    var createAdmin by remember { mutableStateOf(false) }
+    var managePermissions by remember { mutableStateOf(false) }
+    val validUsername = adminUsername.length >= 4 && adminUsername.all { it.isLetterOrDigit() }
+
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("ADMIN PERMISSIONS", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Search an Admin account, then select the functions that Admin is allowed to use.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(value=adminUsername, onValueChange={v -> if(v.all { it.isLetterOrDigit() }) { adminUsername=v; searched=false }}, label={Text("Admin Username")}, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        Button(onClick={searched=true}, enabled=validUsername, colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
+            Text("SEARCH ADMIN", fontWeight=FontWeight.Bold)
+        }
+
+        if (searched) {
+            Spacer(Modifier.height(18.dp))
+            Card(Modifier.fillMaxWidth()) {
+                Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+                    Text("ADMIN ACCOUNT", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), style=MaterialTheme.typography.titleLarge)
+                    Spacer(Modifier.height(8.dp))
+                    Text("Admin Full Name", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium)
+                    Text("Username: $adminUsername", fontWeight=FontWeight.Bold)
+                }
+            }
+            Spacer(Modifier.height(14.dp))
+            Text("ALLOWED FUNCTIONS", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleLarge, modifier=Modifier.fillMaxWidth())
+
+            @Composable fun PermissionRow(label: String, checked: Boolean, change: (Boolean)->Unit) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically) {
+                    Checkbox(checked=checked, onCheckedChange=change)
+                    Text(label, fontWeight=FontWeight.Bold)
+                }
+            }
+            PermissionRow("CREATE MEMBER", createMember) { createMember=it }
+            PermissionRow("CREDIT CASH", creditCash) { creditCash=it }
+            PermissionRow("APPROVALS", approvals) { approvals=it }
+            PermissionRow("MEMBERS", members) { members=it }
+            PermissionRow("CREATE ADMIN", createAdmin) { createAdmin=it }
+            PermissionRow("ADMIN PERMISSIONS", managePermissions) { managePermissions=it }
+
+            Spacer(Modifier.height(14.dp))
+            Button(onClick={}, modifier=Modifier.height(46.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) {
+                Text("SAVE PERMISSIONS", fontWeight=FontWeight.Bold)
+            }
+            Spacer(Modifier.height(14.dp))
+            Text("Stage 14 interface only. Permission selections will be enforced after secure backend authentication is connected. The main Admin will retain overall control.", color=Color.Gray, textAlign=TextAlign.Center)
+        }
     }
 }
 
