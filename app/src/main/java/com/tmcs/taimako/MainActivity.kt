@@ -100,7 +100,6 @@ fun InfoPage(page: String, back: () -> Unit) {
         Text(page, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Spacer(Modifier.height(16.dp))
         when(page) {
-            "SAVINGS" -> SavingsPage()
             "LOAN" -> Text("LOAN FOR NON-COOPERATIVE MEMBERS\n\nMembers of the community can apply for a loan. A non-member is required to provide a guarantor who is a member of TMCS LTD, or deposit collateral.\n\nLoan duration: 30 days\nInterest charge: 8%\n\nAPPLY HERE — Contact Us")
             "INVESTMENT" -> Text("Members and non-members can participate in the TMCS LTD Investment Plan.\n\nMinimum investment: ₦10,000\nMinimum duration: 6 months\nReturn on Investment: 1% monthly, unconditional.")
             "AGRICULTURE" -> Text("COMING SOON", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold)
