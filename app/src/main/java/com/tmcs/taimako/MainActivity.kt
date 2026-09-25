@@ -25,7 +25,14 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TaimakoApp() {
-    val tmcsColors = lightColorScheme(\n        primary = Color(0xFF146B3A),\n        onPrimary = Color.White,\n        secondary = Color(0xFFD4AF37),\n        background = Color.White,\n        surface = Color.White\n    )\n    MaterialTheme(colorScheme = tmcsColors) {
+    val tmcsColors = lightColorScheme(
+        primary = Color(0xFF146B3A),
+        onPrimary = Color.White,
+        secondary = Color(0xFFD4AF37),
+        background = Color.White,
+        surface = Color.White
+    )
+    MaterialTheme(colorScheme = tmcsColors) {
         var page by remember { mutableStateOf("HOME") }
         Surface(Modifier.fillMaxSize()) {
             if (page == "HOME") HomePage { page = it } else InfoPage(page) { page = "HOME" }
