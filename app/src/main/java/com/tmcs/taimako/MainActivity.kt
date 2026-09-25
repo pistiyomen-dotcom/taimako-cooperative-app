@@ -36,7 +36,13 @@ fun TaimakoApp() {
     MaterialTheme(colorScheme = tmcsColors) {
         var page by remember { mutableStateOf("HOME") }
         Surface(Modifier.fillMaxSize()) {
-            if (page == "HOME") HomePage { page = it } else InfoPage(page) { page = "HOME" }
+            when (page) {
+                "HOME" -> HomePage { page = it }
+                "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
+                "LOGIN" -> LoginPage { page = "MEMBERSHIP" }
+                "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
+                else -> InfoPage(page) { page = "HOME" }
+            }
         }
     }
 }
@@ -51,7 +57,7 @@ fun HomePage(open: (String) -> Unit) {
         Spacer(Modifier.height(30.dp))
         Text("TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
         Spacer(Modifier.height(14.dp))
-        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
+        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Text("A cooperative movement for achieving financial independence.")
         Spacer(Modifier.height(24.dp))
         menus.chunked(2).forEach { row ->
@@ -79,7 +85,6 @@ fun InfoPage(page: String, back: () -> Unit) {
             "INVESTMENT" -> Text("Members and non-members can participate in the TMCS LTD Investment Plan.\n\nMinimum investment: ₦10,000\nMinimum duration: 6 months\nReturn on Investment: 1% monthly, unconditional.")
             "AGRICULTURE" -> Text("COMING SOON", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold)
             "FLEXIBLE" -> Text("Suitable for petty traders, students and the general public.\n\n• Save any amount any day.\n• Minimum duration: 30 days.\n• No membership registration; purchase of record card only.\n• No monthly dividend shares.\n• Withdraw 100% after 30 days.\n• One free withdrawal every 30 days.\n• 20% charge for withdrawal before 30 days.")
-            "MEMBERSHIP" -> Text("LOGIN\n\nREGISTER\n\nPublic self-registration is not available. REGISTER will lead to the Contact Us form. Member accounts are created by an Admin.")
             "ABOUT US" -> AboutPage()
             "CONTACT US" -> ContactPage()
         }
@@ -122,4 +127,50 @@ fun ContactPage() {
     Spacer(Modifier.height(12.dp))
     Button(onClick={}, enabled=name.isNotBlank()&&phone.isNotBlank()&&subject.isNotBlank()&&message.isNotBlank(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("SUBMIT") }
     Text("Stage 1 form only — backend submission will be connected in a later stage.")
+}
+
+
+@Composable
+fun MembershipPage(open: (String) -> Unit, back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("MEMBERSHIP", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(20.dp))
+        Button(onClick={open("LOGIN")}, modifier=Modifier.fillMaxWidth().height(58.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) { Text("LOGIN") }
+        Spacer(Modifier.height(14.dp))
+        Button(onClick={open("REGISTER")}, modifier=Modifier.fillMaxWidth().height(58.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) { Text("REGISTER") }
+    }
+}
+
+@Composable
+fun LoginPage(back: () -> Unit) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("MEMBER LOGIN", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(16.dp))
+        OutlinedTextField(username,{ if (it.length <= 5 && it.all(Char::isDigit)) username=it },label={Text("5-digit Username")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(password,{password=it},label={Text("Password")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(16.dp))
+        Button(onClick={}, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
+        Spacer(Modifier.height(12.dp))
+        Text("Stage 2 interface test only. Authentication will be connected to the backend in a controlled later step.")
+    }
+}
+
+@Composable
+fun RegisterPage(contact: () -> Unit, back: () -> Unit) {
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back) { Text("← BACK") }
+        Text("REGISTER", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(16.dp))
+        Text("Public self-registration is not available. Member accounts are created by an authorized Admin.")
+        Spacer(Modifier.height(16.dp))
+        Button(onClick=contact, modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("CONTACT US TO REGISTER") }
+    }
 }
