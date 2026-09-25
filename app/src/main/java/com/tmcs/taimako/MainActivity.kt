@@ -39,7 +39,7 @@ fun TaimakoApp() {
             when (page) {
                 "HOME" -> HomePage { page = it }
                 "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
-                "LOGIN" -> LoginPage { page = "MEMBERSHIP" }
+                "LOGIN" -> LoginPage(login = { page = "MEMBER DASHBOARD" }, back = { page = "MEMBERSHIP" })
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> MemberPlaceholderPage("PAY") { page = "MEMBER DASHBOARD" }
@@ -150,7 +150,7 @@ fun MembershipPage(open: (String) -> Unit, back: () -> Unit) {
 }
 
 @Composable
-fun LoginPage(back: () -> Unit) {
+fun LoginPage(login: () -> Unit, back: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
@@ -162,9 +162,9 @@ fun LoginPage(back: () -> Unit) {
         Spacer(Modifier.height(10.dp))
         OutlinedTextField(password,{password=it},label={Text("Password")},modifier=Modifier.fillMaxWidth())
         Spacer(Modifier.height(16.dp))
-        Button(onClick={/* Stage 3 UI preview: backend authentication comes later */}, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
+        Button(onClick=login, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
         Spacer(Modifier.height(12.dp))
-        Text("Stage 2 interface test only. Authentication will be connected to the backend in a controlled later step.")
+        Text("STAGE 3 TEST LOGIN: Enter any 5-digit username and any non-empty password to open the Member Dashboard. Real authentication is not connected yet.", color=Color.Gray)
     }
 }
 
