@@ -16,6 +16,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
@@ -276,6 +278,7 @@ fun PayPage(back: () -> Unit) {
     var selected by remember { mutableStateOf("") }
     var expanded by remember { mutableStateOf(false) }
     var receiptName by remember { mutableStateOf("") }
+    val clipboardManager = LocalClipboardManager.current
     val destinations = listOf("REGULAR","TARGET","CONSTANT","WELFARE","FLEXIBLE","LOAN","INTEREST","REGISTRATION")
     val receiptPicker = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
         receiptName = if (uri != null) "Receipt selected" else ""
@@ -291,7 +294,11 @@ fun PayPage(back: () -> Unit) {
             Column(Modifier.padding(14.dp)) {
                 Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
                 Spacer(Modifier.height(6.dp))
-                Text("Account Number: 1027050172\nBank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, lineHeight=24.sp)
+                Row(Modifier.fillMaxWidth(), verticalAlignment=Alignment.CenterVertically) {
+                    Text("Account Number: 1027050172", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, modifier=Modifier.weight(1f))
+                    TextButton(onClick={ clipboardManager.setText(AnnotatedString("1027050172")) }) { Text("COPY") }
+                }
+                Text("Bank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, lineHeight=24.sp)
             }
         }
 
