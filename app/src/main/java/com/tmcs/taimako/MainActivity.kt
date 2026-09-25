@@ -13,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +25,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun TaimakoApp() {
-    MaterialTheme {
+    val tmcsColors = lightColorScheme(\n        primary = Color(0xFF146B3A),\n        onPrimary = Color.White,\n        secondary = Color(0xFFD4AF37),\n        background = Color.White,\n        surface = Color.White\n    )\n    MaterialTheme(colorScheme = tmcsColors) {
         var page by remember { mutableStateOf("HOME") }
         Surface(Modifier.fillMaxSize()) {
             if (page == "HOME") HomePage { page = it } else InfoPage(page) { page = "HOME" }
@@ -61,7 +62,7 @@ fun HomePage(open: (String) -> Unit) {
 fun InfoPage(page: String, back: () -> Unit) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
         Spacer(Modifier.height(28.dp))
-        TextButton(onClick=back) { Text("← HOME") }
+        TextButton(onClick=back) { Text("← BACK") }
         Text(page, style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold)
         Spacer(Modifier.height(16.dp))
         when(page) {
