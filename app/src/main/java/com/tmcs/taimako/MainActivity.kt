@@ -201,6 +201,7 @@ fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
         Spacer(Modifier.height(6.dp))
         Text("Stage 3 interface preview — sample values only.", color=Color.Gray)
         Spacer(Modifier.height(18.dp))
+
         val fields = listOf(
             "REGISTRATION" to "₦0",
             "REGULAR" to "₦0",
@@ -215,17 +216,37 @@ fun MemberDashboardPage(open: (String) -> Unit, back: () -> Unit) {
             "PAYMENT DUE DATE" to "—",
             "LOAN INTEREST" to "₦0"
         )
-        fields.forEach { (label, value) ->
-            Card(Modifier.fillMaxWidth().padding(vertical=5.dp)) {
-                Row(Modifier.fillMaxWidth().padding(14.dp), horizontalArrangement=Arrangement.SpaceBetween) {
-                    Text(label, fontWeight=FontWeight.Bold, modifier=Modifier.weight(1f))
-                    Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold)
+        fields.chunked(2).forEach { pair ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(10.dp)) {
+                pair.forEach { (label,value) ->
+                    Card(Modifier.weight(1f).height(92.dp)) {
+                        Column(Modifier.fillMaxSize().padding(10.dp), verticalArrangement=Arrangement.SpaceBetween) {
+                            Text(label, fontWeight=FontWeight.Bold, style=MaterialTheme.typography.labelMedium)
+                            Text(value, color=Color(0xFF146B3A), fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium)
+                        }
+                    }
                 }
+                if(pair.size==1) Spacer(Modifier.weight(1f))
             }
+            Spacer(Modifier.height(10.dp))
         }
-        Spacer(Modifier.height(16.dp))
-        listOf("PAY","TRANSACTION HISTORY","WITHDRAW","APPLY FOR LOAN").forEach { item ->
-            Button(onClick={open(item)}, modifier=Modifier.fillMaxWidth().height(54.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) { Text(item) }
+
+        Spacer(Modifier.height(8.dp))
+        val actions = listOf(
+            "PAY" to "PAY",
+            "HISTORY" to "TRANSACTION HISTORY",
+            "WITHDRAW" to "WITHDRAW",
+            "LOAN" to "APPLY FOR LOAN"
+        )
+        actions.chunked(3).forEach { row ->
+            Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(8.dp)) {
+                row.forEach { (label,destination) ->
+                    Button(onClick={open(destination)}, modifier=Modifier.weight(1f).height(52.dp), contentPadding=PaddingValues(horizontal=4.dp), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)) {
+                        Text(label, style=MaterialTheme.typography.labelLarge)
+                    }
+                }
+                repeat(3-row.size) { Spacer(Modifier.weight(1f)) }
+            }
             Spacer(Modifier.height(10.dp))
         }
     }
