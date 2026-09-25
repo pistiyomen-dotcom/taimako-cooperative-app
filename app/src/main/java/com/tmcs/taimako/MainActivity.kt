@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.graphics.Color
 
 class MainActivity : ComponentActivity() {
@@ -290,7 +291,7 @@ fun PayPage(back: () -> Unit) {
             Column(Modifier.padding(14.dp)) {
                 Text("BANK TRANSFER DETAILS", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
                 Spacer(Modifier.height(6.dp))
-                Text("Account Number: 1027050172\nBank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold)
+                Text("Account Number: 1027050172\nBank Name: FCMB\nAccount Name: TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", fontWeight=FontWeight.Bold, style=MaterialTheme.typography.titleMedium, lineHeight=24.sp)
             }
         }
 
@@ -322,7 +323,7 @@ fun PayPage(back: () -> Unit) {
         Spacer(Modifier.height(14.dp))
         Button(
             onClick={receiptPicker.launch("image/*")},
-            modifier=Modifier.fillMaxWidth(),
+            modifier=Modifier.align(Alignment.CenterHorizontally),
             colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A), contentColor=Color.White)
         ) { Text(if(receiptName.isBlank()) "UPLOAD PAYMENT RECEIPT" else "RECEIPT SELECTED ✓") }
 
@@ -332,7 +333,7 @@ fun PayPage(back: () -> Unit) {
         Button(
             onClick={},
             enabled=amount.isNotBlank() && amount.toLongOrNull()?.let { it > 0 } == true && selected.isNotBlank() && receiptName.isNotBlank(),
-            modifier=Modifier.fillMaxWidth().height(54.dp),
+            modifier=Modifier.align(Alignment.CenterHorizontally).height(54.dp),
             colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
         ) { Text("SUBMIT", fontWeight=FontWeight.Bold) }
         Spacer(Modifier.height(10.dp))
