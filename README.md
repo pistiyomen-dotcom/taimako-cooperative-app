@@ -1,0 +1,1 @@
+# taimako-cooperative-app
