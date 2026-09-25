@@ -7,6 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.background
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -48,15 +49,15 @@ fun HomePage(open: (String) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(Modifier.height(30.dp))
-        Text("TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold)
+        Text("TAIMAKO MULTIPURPOSE COOPERATIVE SOCIETY LTD", style=MaterialTheme.typography.headlineSmall, fontWeight=FontWeight.Bold, color=Color(0xFF146B3A))
         Spacer(Modifier.height(14.dp))
-        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold)
+        Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Text("A cooperative movement for achieving financial independence.")
         Spacer(Modifier.height(24.dp))
         menus.chunked(2).forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(12.dp)) {
                 row.forEach { item ->
-                    Button(onClick={open(item)}, modifier=Modifier.weight(1f).height(64.dp)) { Text(item) }
+                    Button(onClick={open(item)}, modifier=Modifier.weight(1f).height(64.dp), colors=ButtonDefaults.buttonColors(containerColor=if (item == "FLEXIBLE" || item == "INVESTMENT" || item == "MEMBERSHIP" || item == "CONTACT US") Color(0xFFD4AF37) else Color(0xFF146B3A), contentColor=if (item == "FLEXIBLE" || item == "INVESTMENT" || item == "MEMBERSHIP" || item == "CONTACT US") Color.Black else Color.White)) { Text(item) }
                 }
                 if(row.size==1) Spacer(Modifier.weight(1f))
             }
