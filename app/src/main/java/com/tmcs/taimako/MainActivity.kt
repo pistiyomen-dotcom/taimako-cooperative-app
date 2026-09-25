@@ -49,7 +49,8 @@ fun TaimakoApp() {
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
                 "ADMIN LOGIN" -> AdminLoginPage(login = { page = "ADMIN DASHBOARD" }, back = { page = "HOME" })
                 "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "ADMIN LOGIN" })
-                "CREATE MEMBER", "CREDIT CASH", "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
+                "CREATE MEMBER" -> CreateMemberPage { page = "ADMIN DASHBOARD" }
+                "CREDIT CASH", "APPROVALS", "MEMBERS", "CREATE ADMIN", "ADMIN PERMISSIONS" -> AdminPlaceholderPage(page) { page = "ADMIN DASHBOARD" }
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -589,5 +590,77 @@ fun AdminPlaceholderPage(title: String, back: () -> Unit) {
         Text(title, style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
         Spacer(Modifier.height(18.dp))
         Text("This Admin function will be implemented and tested separately in the next controlled step.", color=Color.Gray, textAlign=TextAlign.Center)
+    }
+}
+
+
+@Composable
+fun CreateMemberPage(back: () -> Unit) {
+    var fullName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
+    var tempPassword by remember { mutableStateOf("") }
+    val validUsername = username.length == 5 && username.all { it.isDigit() }
+    val validPassword = tempPassword.length == 4 && tempPassword.all { it.isDigit() }
+    val ready = fullName.isNotBlank() && phone.isNotBlank() && validUsername && validPassword
+
+    Column(
+        Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Spacer(Modifier.height(28.dp))
+        TextButton(onClick=back, modifier=Modifier.align(Alignment.Start)) { Text("← BACK") }
+        Text("CREATE MEMBER", style=MaterialTheme.typography.headlineLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37), textAlign=TextAlign.Center, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(6.dp))
+        Text("Stage 9 interface test — member account is not created in the backend yet.", color=Color.Gray, textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp))
+
+        OutlinedTextField(
+            value=fullName,
+            onValueChange={fullName=it},
+            label={Text("Member Full Name")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(
+            value=phone,
+            onValueChange={ value -> if (value.all { it.isDigit() || it == '+' }) phone=value },
+            label={Text("Phone Number")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(
+            value=username,
+            onValueChange={ value -> if (value.length <= 5 && value.all { it.isDigit() }) username=value },
+            label={Text("5-digit Username")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Text("Username must contain exactly 5 numeric digits.", color=Color.Gray, style=MaterialTheme.typography.bodySmall, modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(
+            value=tempPassword,
+            onValueChange={ value -> if (value.length <= 4 && value.all { it.isDigit() }) tempPassword=value },
+            label={Text("4-digit Temporary Password")},
+            modifier=Modifier.fillMaxWidth()
+        )
+        Text("Temporary password is intended for one successful login only. The member will be required to change it after first login when backend authentication is connected.", color=Color.Gray, style=MaterialTheme.typography.bodySmall, modifier=Modifier.fillMaxWidth())
+
+        Spacer(Modifier.height(18.dp))
+        Button(
+            onClick={},
+            enabled=ready,
+            modifier=Modifier.height(44.dp),
+            contentPadding=PaddingValues(horizontal=20.dp, vertical=4.dp),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+        ) { Text("CREATE MEMBER", fontWeight=FontWeight.Bold) }
+
+        Spacer(Modifier.height(14.dp))
+        Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(14.dp), horizontalAlignment=Alignment.CenterHorizontally) {
+                Text("ACCOUNT RULES", fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+                Spacer(Modifier.height(6.dp))
+                Text("• Member username: exactly 5 numeric digits.\n• Initial password: exactly 4 numeric digits.\n• Temporary password will expire after the first successful login.\n• Admin will not be able to read the member's new personal password.", textAlign=TextAlign.Start, modifier=Modifier.fillMaxWidth())
+            }
+        }
     }
 }
