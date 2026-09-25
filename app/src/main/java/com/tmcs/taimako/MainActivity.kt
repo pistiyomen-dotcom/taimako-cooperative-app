@@ -45,10 +45,9 @@ fun TaimakoApp() {
             when (page) {
                 "HOME" -> HomePage { page = it }
                 "MEMBERSHIP" -> MembershipPage(open = { page = it }, back = { page = "HOME" })
-                "LOGIN" -> LoginPage(login = { page = "MEMBER DASHBOARD" }, back = { page = "MEMBERSHIP" })
+                "LOGIN" -> LoginPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "REGISTER" -> RegisterPage(contact = { page = "CONTACT US" }, back = { page = "MEMBERSHIP" })
-                "ADMIN LOGIN" -> AdminLoginPage(login = { page = "ADMIN DASHBOARD" }, back = { page = "HOME" })
-                "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "ADMIN LOGIN" })
+                "ADMIN DASHBOARD" -> AdminDashboardPage(open = { page = it }, back = { page = "LOGIN" })
                 "CREATE MEMBER" -> CreateMemberPage { page = "ADMIN DASHBOARD" }
                 "CREDIT CASH" -> CreditCashPage { page = "ADMIN DASHBOARD" }
                 "APPROVALS" -> ApprovalsPage { page = "ADMIN DASHBOARD" }
@@ -68,7 +67,7 @@ fun TaimakoApp() {
 
 @Composable
 fun HomePage(open: (String) -> Unit) {
-    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US","ADMIN LOGIN")
+    val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US")
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -164,21 +163,41 @@ fun MembershipPage(open: (String) -> Unit, back: () -> Unit) {
 }
 
 @Composable
-fun LoginPage(login: () -> Unit, back: () -> Unit) {
+fun LoginPage(open: (String) -> Unit, back: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val validMemberUsername = username.length == 5 && username.all { it.isDigit() }
+    val validAdminUsername = username.length >= 4 && username.all { it.isLetterOrDigit() }
+    val ready = (validMemberUsername || validAdminUsername) && password.isNotBlank()
+
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp)) {
         Spacer(Modifier.height(28.dp))
         TextButton(onClick=back) { Text("← BACK") }
-        Text("MEMBER LOGIN", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Text("LOGIN", style=MaterialTheme.typography.headlineMedium, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
+        Spacer(Modifier.height(6.dp))
+        Text("Members and Admins use this same secure login panel.", color=Color.Gray)
         Spacer(Modifier.height(16.dp))
-        OutlinedTextField(username,{ if (it.length <= 5 && it.all(Char::isDigit)) username=it },label={Text("5-digit Username")},modifier=Modifier.fillMaxWidth())
+        OutlinedTextField(
+            username,
+            { value -> if (value.all { it.isLetterOrDigit() }) username=value },
+            label={Text("Username")},
+            modifier=Modifier.fillMaxWidth()
+        )
         Spacer(Modifier.height(10.dp))
         OutlinedTextField(password,{password=it},label={Text("Password")},modifier=Modifier.fillMaxWidth())
         Spacer(Modifier.height(16.dp))
-        Button(onClick=login, enabled=username.length==5 && password.isNotBlank(), modifier=Modifier.fillMaxWidth(), colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)) { Text("LOGIN") }
+        Button(
+            onClick={
+                // Interface test only: 5 numeric digits represent a Member account.
+                // Other valid usernames represent an Admin account until backend role lookup is connected.
+                if (validMemberUsername) open("MEMBER DASHBOARD") else open("ADMIN DASHBOARD")
+            },
+            enabled=ready,
+            modifier=Modifier.fillMaxWidth(),
+            colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37), contentColor=Color.Black)
+        ) { Text("LOGIN") }
         Spacer(Modifier.height(12.dp))
-        Text("STAGE 3 TEST LOGIN: Enter any 5-digit username and any non-empty password to open the Member Dashboard. Real authentication is not connected yet.", color=Color.Gray)
+        Text("INTERFACE TEST ONLY: the final backend will authenticate the credentials and determine the account role automatically. Members will open the Member Dashboard and Admins will open the Admin Dashboard.", color=Color.Gray)
     }
 }
 
