@@ -64,6 +64,8 @@ fun TaimakoApp() {
                 "MEMBERS" -> MembersPage { page = "ADMIN DASHBOARD" }
                 "CREATE ADMIN" -> CreateAdminPage { page = "ADMIN DASHBOARD" }
                 "ADMIN PERMISSIONS" -> AdminPermissionsPage { page = "ADMIN DASHBOARD" }
+                "CHANGE MEMBER PIN" -> ChangePinPage("CHANGE TEMPORARY PIN", { page = "MEMBER DASHBOARD" }, { page = "LOGIN" })
+                "CHANGE FLEXIBLE PIN" -> ChangePinPage("CHANGE TEMPORARY PIN", { page = "FLEXIBLE DASHBOARD" }, { page = "FLEXIBLE LOGIN" })
                 "MEMBER DASHBOARD" -> MemberDashboardPage(open = { page = it }, back = { page = "MEMBERSHIP" })
                 "PAY" -> PayPage { page = "MEMBER DASHBOARD" }
                 "TRANSACTION HISTORY" -> TransactionHistoryPage { page = "MEMBER DASHBOARD" }
@@ -333,7 +335,7 @@ fun LoginPage(open: (String) -> Unit, back: () -> Unit) {
             onClick={
                 // Interface test only: 5 numeric digits represent a Member account.
                 // Other valid usernames represent an Admin account until backend role lookup is connected.
-                if (validMemberUsername) open("MEMBER DASHBOARD") else open("ADMIN DASHBOARD")
+                if (validMemberUsername) open("CHANGE MEMBER PIN") else open("ADMIN DASHBOARD")
             },
             enabled=ready,
             modifier=Modifier.fillMaxWidth(),
@@ -341,6 +343,22 @@ fun LoginPage(open: (String) -> Unit, back: () -> Unit) {
         ) { Text("LOGIN") }
         Spacer(Modifier.height(12.dp))
         Text("INTERFACE TEST ONLY: the final backend will authenticate credentials and determine the account role. Any Admin-generated password/PIN is temporary and must be changed on the first successful login before dashboard access.", color=Color.Gray)
+    }
+}
+
+@Composable
+fun ChangePinPage(title:String,continueTo:()->Unit,back:()->Unit){
+    var newPin by remember{mutableStateOf("")};var confirm by remember{mutableStateOf("")}
+    val ready=newPin.length==4&&newPin.all{it.isDigit()}&&confirm==newPin
+    Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),horizontalAlignment=Alignment.CenterHorizontally){
+        Spacer(Modifier.height(28.dp));TextButton(onClick=back,modifier=Modifier.align(Alignment.Start)){Text("← BACK")}
+        Text(title,style=MaterialTheme.typography.headlineMedium,fontWeight=FontWeight.Bold,color=Color(0xFFD4AF37),textAlign=TextAlign.Center)
+        Spacer(Modifier.height(8.dp));Text("Your Admin-generated PIN is temporary. Create your personal 4-digit PIN before accessing the account.",color=Color.Gray,textAlign=TextAlign.Center)
+        Spacer(Modifier.height(18.dp));OutlinedTextField(newPin,{v->if(v.length<=4&&v.all{it.isDigit()})newPin=v},label={Text("New 4-digit PIN")},modifier=Modifier.fillMaxWidth())
+        Spacer(Modifier.height(10.dp));OutlinedTextField(confirm,{v->if(v.length<=4&&v.all{it.isDigit()})confirm=v},label={Text("Confirm New PIN")},modifier=Modifier.fillMaxWidth())
+        if(confirm.isNotEmpty()&&confirm!=newPin){Spacer(Modifier.height(6.dp));Text("PINs do not match.",color=MaterialTheme.colorScheme.error)}
+        Spacer(Modifier.height(18.dp));Button(onClick=continueTo,enabled=ready,modifier=Modifier.fillMaxWidth(),colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("CHANGE PIN & CONTINUE",fontWeight=FontWeight.Bold)}
+        Spacer(Modifier.height(12.dp));Text("Interface checkpoint only. The backend will enforce this screen only on the first successful login and securely store the new PIN hash.",color=Color.Gray,textAlign=TextAlign.Center)
     }
 }
 
@@ -862,6 +880,8 @@ fun CreateMemberPage(back: () -> Unit) {
     var phone by remember { mutableStateOf("") }
     var username by remember { mutableStateOf("") }
     var pin by remember { mutableStateOf("") }
+    var linkRegular by remember { mutableStateOf("") }
+    var linkChecked by remember { mutableStateOf(false) }
     val validUsername = if (accountType=="REGULAR") username.length==5 && username.all { it.isDigit() } else username.length==4 && username.startsWith("F") && username.drop(1).all { it.isDigit() }
     val validPin = pin.length==4 && pin.all { it.isDigit() }
     val ready = fullName.isNotBlank() && phone.isNotBlank() && validUsername && validPin
@@ -875,6 +895,13 @@ fun CreateMemberPage(back: () -> Unit) {
         OutlinedTextField(phone,{v->if(v.all{it.isDigit()||it=='+'})phone=v},label={Text("Phone Number")},modifier=Modifier.fillMaxWidth()); Spacer(Modifier.height(10.dp))
         OutlinedTextField(username,{v->val up=v.uppercase();if(accountType=="REGULAR"){if(up.length<=5&&up.all{it.isDigit()})username=up}else{if(up.length<=4&&(up.isEmpty()||(up.startsWith("F")&&up.drop(1).all{it.isDigit()})))username=up}},label={Text(if(accountType=="REGULAR")"5-digit Numeric Username" else "Flexible Username (F + 3 digits)")},modifier=Modifier.fillMaxWidth()); Spacer(Modifier.height(10.dp))
         OutlinedTextField(pin,{v->if(v.length<=4&&v.all{it.isDigit()})pin=v},label={Text("4-digit Numeric PIN")},modifier=Modifier.fillMaxWidth()); Spacer(Modifier.height(18.dp))
+        if(accountType=="FLEXIBLE"){
+            OutlinedTextField(linkRegular,{v->if(v.length<=5&&v.all{it.isDigit()}){linkRegular=v;linkChecked=false}},label={Text("Link to Regular Username (optional)")},modifier=Modifier.fillMaxWidth())
+            Spacer(Modifier.height(8.dp))
+            Button(onClick={linkChecked=true},enabled=linkRegular.length==5,colors=ButtonDefaults.buttonColors(containerColor=Color(0xFF146B3A),contentColor=Color.White)){Text("SEARCH REGULAR MEMBER",fontWeight=FontWeight.Bold)}
+            if(linkChecked){Spacer(Modifier.height(8.dp));Text("Regular Member Full Name • $linkRegular",color=Color(0xFF146B3A),fontWeight=FontWeight.Bold,textAlign=TextAlign.Center)}
+            Spacer(Modifier.height(12.dp))
+        }
         Button(onClick={},enabled=ready,colors=ButtonDefaults.buttonColors(containerColor=Color(0xFFD4AF37),contentColor=Color.Black)){Text("CREATE ACCOUNT",fontWeight=FontWeight.Bold)}
         Spacer(Modifier.height(14.dp)); Text(if(accountType=="REGULAR")"Regular username: exactly 5 numeric digits. Login PIN: exactly 4 numeric digits." else "Flexible username: F followed by exactly 3 numeric digits. Login PIN: exactly 4 numeric digits.",color=Color.Gray,textAlign=TextAlign.Center)
         Text("The Admin-generated PIN is TEMPORARY. On the first successful login, the user must change it before accessing the account. Interface only until backend authentication is connected.",color=Color.Gray,textAlign=TextAlign.Center)
