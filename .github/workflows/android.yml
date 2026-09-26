@@ -1,0 +1,45 @@
+name: Android Stage 1 Build
+on:
+  workflow_dispatch:
+  push:
+    branches: [ stage-1-public-app ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Restore stable test signing key
+        uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: taimako-stable-debug-keystore-v1
+      - name: Build debug APK
+        run: gradle :app:assembleDebug
+      - name: Verify APK signing and package
+        run: |
+          APK=app/build/outputs/apk/debug/app-debug.apk
+          ${ANDROID_HOME}/build-tools/35.0.0/apksigner verify --verbose --print-certs "$APK"
+          ${ANDROID_HOME}/build-tools/35.0.0/aapt dump badging "$APK" | head -20
+      - name: Prepare direct-install APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk TAIMAKO-Stage-1-Test.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: taimako-stage1-debug-apk
+          path: TAIMAKO-Stage-1-Test.apk
+      - name: Publish Stage 1 test APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete stage-1-test --yes --cleanup-tag || true
+          gh release create stage-1-test TAIMAKO-Stage-1-Test.apk --target "$GITHUB_SHA" --title "TAIMAKO Stage 1 Test" --notes "Installable Stage 1 test APK. Public interface test build."

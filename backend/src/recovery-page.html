@@ -1,0 +1,14 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TAIMAKO administrator recovery</title><style>body{font:17px Arial,sans-serif;max-width:480px;margin:30px auto;padding:18px}label{display:block;margin-top:20px}input,button{display:block;width:100%;box-sizing:border-box;padding:13px;font-size:17px}button{margin-top:24px;background:#176b44;color:white;border:0}p{line-height:1.5}</style></head><body><h1>TAIMAKO administrator recovery</h1><p>Use this page only on the official TAIMAKO backend. One-time recovery for Shugaba.</p><form id="recovery"><label>New temporary password (12 characters minimum)<input id="password" type="password" minlength="12" maxlength="128" autocomplete="new-password" required></label><label>New private recovery secret from Render<input id="secret" type="password" autocomplete="off" required></label><button id="submit">Reset Shugaba password</button></form><p id="status" role="status"></p><script>
+document.getElementById("recovery").onsubmit=async function(e){
+e.preventDefault();
+const b=document.getElementById("submit"),p=document.getElementById("password"),s=document.getElementById("secret"),out=document.getElementById("status");
+b.disabled=true;out.textContent="Submitting...";
+try{
+const response=await fetch("/recovery/shugaba",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({newPassword:p.value,recoverySecret:s.value}),cache:"no-store"});
+p.value="";s.value="";
+out.textContent=response.ok?"Password reset succeeded. Remove ADMIN_RECOVERY_SECRET from Render now.":"Reset not completed (HTTP "+response.status+"). Check your details; do not repeatedly submit.";
+if(response.ok)document.getElementById("recovery").hidden=true;
+}catch{out.textContent="Connection error. Check the network before retrying."}
+finally{b.disabled=false}
+};
+</script></body></html>

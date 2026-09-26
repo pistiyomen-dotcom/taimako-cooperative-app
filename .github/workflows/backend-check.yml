@@ -1,0 +1,39 @@
+name: Backend validation
+on:
+  push:
+    branches: [stage-1-public-app]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-check.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --omit=dev
+        working-directory: backend
+      - name: Check backend JavaScript syntax
+        run: |
+          node --check backend/src/server.js
+          node --check backend/src/bootstrap.js
+          node --check backend/src/recovery.js
+      - name: Validate administrator bootstrap isolation
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const server=fs.readFileSync('backend/src/server.js','utf8');
+          const bootstrap=fs.readFileSync('backend/src/bootstrap.js','utf8');
+          for(const expected of ['BOOTSTRAP_SECRET','timingSafeEqual','pg_advisory_xact_lock',"role='ADMIN'",'must_change_credential']) {
+            if(!bootstrap.includes(expected)) throw new Error('Missing bootstrap guard: '+expected);
+          }
+          if(!server.includes('require("./bootstrap")(pool)')) throw new Error('Bootstrap not mounted');
+          console.log('Administrator bootstrap source checks passed');
+          NODE
+      - name: Verify no real-money routes are enabled
+        run: |
+          node -e "const fs=require('fs');const s=fs.readFileSync('backend/src/server.js','utf8');if(!s.includes('financialTransactions:false'))process.exit(1)"
