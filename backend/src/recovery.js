@@ -4,6 +4,20 @@ const crypto=require("crypto");
 const rateLimit=require("express-rate-limit");
 module.exports=function(pool){
  const router=express.Router();
+ router.post("/diagnose",rateLimit({windowMs:15*60*1000,max:5,standardHeaders:"draft-7",legacyHeaders:false}),async(req,res,next)=>{
+  try{
+   const expected=process.env.ADMIN_RECOVERY_SECRET;
+   const provided=req.body&&req.body.recoverySecret;
+   if(typeof expected!=="string"||expected.length<40||typeof provided!=="string"||
+      !crypto.timingSafeEqual(crypto.createHash("sha256").update(expected).digest(),crypto.createHash("sha256").update(provided).digest()))
+     return res.status(403).json({error:"Recovery secret unavailable or invalid"});
+   const q=await pool.query("SELECT id,active FROM accounts WHERE username=$1 AND role='ADMIN'",["Shugaba"]);
+   if(!q.rowCount)return res.json({status:"SHUGABA_NOT_FOUND"});
+   if(!q.rows[0].active)return res.json({status:"SHUGABA_INACTIVE"});
+   const used=await pool.query("SELECT 1 FROM security_events WHERE account_id=$1 AND event_type='FIRST_ADMIN_RECOVERY_USED' LIMIT 1",[q.rows[0].id]);
+   return res.json({status:used.rowCount?"RECOVERY_ALREADY_USED":"SHUGABA_READY_FOR_RECOVERY"});
+  }catch(e){next(e)}
+ });
  router.post("/shugaba",rateLimit({windowMs:15*60*1000,max:5,standardHeaders:"draft-7",legacyHeaders:false}),async(req,res,next)=>{
   const expected=process.env.ADMIN_RECOVERY_SECRET;
   const provided=req.body&&req.body.recoverySecret;
