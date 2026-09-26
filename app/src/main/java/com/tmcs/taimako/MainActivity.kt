@@ -1,6 +1,8 @@
 package com.tmcs.taimako
 
 import android.os.Bundle
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -79,6 +81,7 @@ fun TaimakoApp() {
 
 @Composable
 fun HomePage(open: (String) -> Unit) {
+    val context = LocalContext.current
     val menus = listOf("SAVINGS","LOAN","INVESTMENT","AGRICULTURE","FLEXIBLE","MEMBERSHIP","BYE-LAW","ABOUT US","CONTACT US")
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(20.dp),
@@ -89,6 +92,8 @@ fun HomePage(open: (String) -> Unit) {
         Spacer(Modifier.height(14.dp))
         Text("Welcome to TMCS LTD", style=MaterialTheme.typography.titleLarge, fontWeight=FontWeight.Bold, color=Color(0xFFD4AF37))
         Text("A cooperative movement for achieving financial independence.")
+        Spacer(Modifier.height(12.dp))
+        OutlinedButton(onClick={context.startActivity(Intent(context, AdminTestActivity::class.java))}) { Text("TEST LIVE ADMIN LOGIN") }
         Spacer(Modifier.height(24.dp))
         menus.chunked(2).forEach { row ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement=Arrangement.spacedBy(12.dp)) {
