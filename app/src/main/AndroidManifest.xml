@@ -7,6 +7,6 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-    <activity android:name=".AdminTestActivity" android:exported="true" android:label="TAIMAKO Admin Test"><intent-filter><action android:name="android.intent.action.MAIN"/><category android:name="android.intent.category.LAUNCHER"/></intent-filter></activity>
+    <activity android:name=".AdminTestActivity" android:exported="false" android:label="TAIMAKO Admin Test"/>
     </application>
 </manifest>
