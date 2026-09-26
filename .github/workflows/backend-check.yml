@@ -18,7 +18,21 @@ jobs:
         run: npm install --omit=dev
         working-directory: backend
       - name: Check backend JavaScript syntax
-        run: node --check backend/src/server.js
+        run: |
+          node --check backend/src/server.js
+          node --check backend/src/bootstrap.js
+      - name: Validate administrator bootstrap isolation
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const server=fs.readFileSync('backend/src/server.js','utf8');
+          const bootstrap=fs.readFileSync('backend/src/bootstrap.js','utf8');
+          for(const expected of ['BOOTSTRAP_SECRET','timingSafeEqual','pg_advisory_xact_lock',"role='ADMIN'",'must_change_credential']) {
+            if(!bootstrap.includes(expected)) throw new Error('Missing bootstrap guard: '+expected);
+          }
+          if(!server.includes('require("./bootstrap")(pool)')) throw new Error('Bootstrap not mounted');
+          console.log('Administrator bootstrap source checks passed');
+          NODE
       - name: Verify no real-money routes are enabled
         run: |
           node -e "const fs=require('fs');const s=fs.readFileSync('backend/src/server.js','utf8');if(!s.includes('financialTransactions:false'))process.exit(1)"
