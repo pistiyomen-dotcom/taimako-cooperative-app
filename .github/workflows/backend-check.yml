@@ -1,0 +1,24 @@
+name: Backend validation
+on:
+  push:
+    branches: [stage-1-public-app]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend-check.yml'
+  workflow_dispatch:
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm install --omit=dev
+        working-directory: backend
+      - name: Check backend JavaScript syntax
+        run: node --check backend/src/server.js
+      - name: Verify no real-money routes are enabled
+        run: |
+          node -e "const fs=require('fs');const s=fs.readFileSync('backend/src/server.js','utf8');if(!s.includes('financialTransactions:false'))process.exit(1)"
