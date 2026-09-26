@@ -1,9 +1,10 @@
 const express=require("express");
 const bcrypt=require("bcryptjs");
 const crypto=require("crypto");
+const rateLimit=require("express-rate-limit");
 module.exports=function firstAdmin(pool){
   const router=express.Router();
-  router.post("/first-admin",async(req,res,next)=>{
+  router.post("/first-admin",rateLimit({windowMs:15*60*1000,max:5,standardHeaders:"draft-7",legacyHeaders:false}),async(req,res,next)=>{
     try{
       const expected=process.env.BOOTSTRAP_SECRET;
       const supplied=req.get("x-bootstrap-secret");
