@@ -18,6 +18,8 @@ app.post("/auth/change-credential",changeLimit,auth,current,async(req,res,next)=
 app.get("/auth/me",auth,current,ready,async(req,res)=>res.json({id:req.account.id,role:req.account.role}));
 app.get("/setup",(_req,res)=>res.sendFile(require("path").join(__dirname,"setup-page.html")));
 app.use("/setup",require("./bootstrap")(pool));
+app.get("/recovery",(_req,res)=>res.sendFile(require("path").join(__dirname,"recovery-page.html")));
+app.use("/recovery",require("./recovery")(pool));
 app.get("/",(req,res)=>res.json({service:"TAIMAKO Cooperative New Backend",financialTransactions:false}));
 app.use((e,req,res,next)=>{console.error("Request failed:",e.message);res.status(500).json({error:"Server error"})});
 init().then(()=>app.listen(process.env.PORT||10000,"0.0.0.0",()=>console.log("TAIMAKO new backend listening"))).catch(e=>{console.error(e);process.exit(1)});
