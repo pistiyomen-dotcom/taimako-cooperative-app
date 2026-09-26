@@ -7,7 +7,7 @@ module.exports=function firstAdmin(pool){
   router.post("/first-admin",rateLimit({windowMs:15*60*1000,max:5,standardHeaders:"draft-7",legacyHeaders:false}),async(req,res,next)=>{
     try{
       const expected=process.env.BOOTSTRAP_SECRET;
-      const supplied=req.get("x-bootstrap-secret");
+      const supplied=req.get("x-bootstrap-secret")||req.body?.bootstrapSecret;
       if(!expected||!supplied||supplied.length!==expected.length||
         !crypto.timingSafeEqual(Buffer.from(supplied),Buffer.from(expected)))
         return res.status(404).json({error:"Not found"});
